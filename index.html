@@ -1405,13 +1405,22 @@
     margin-bottom: 6vh;
   }
 
-  .investment-card {
-    max-width: 640px;
+  .investment-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
     margin: 0 auto;
+    align-items: stretch;
+  }
+
+  .investment-card {
     background: var(--color-warm-white);
     border: 1px solid rgba(201, 169, 110, 0.3);
-    padding: 5rem 4rem;
+    padding: 4rem 2.5rem 3.5rem;
     position: relative;
+    display: flex;
+    flex-direction: column;
   }
 
   .investment-card::before,
@@ -1570,15 +1579,97 @@
     z-index: 1;
   }
 
-  .investment-tiers-info {
+  /* Aktive Card (Pre-Release) — leuchtet stärker, hat den CTA */
+  .investment-card--active {
+    border-color: rgba(201, 169, 110, 0.6);
+    box-shadow: 0 0 60px rgba(201, 169, 110, 0.15);
+  }
+
+  /* Inaktive Cards (Early Bird, Standard) — gedämpft als Anker */
+  .investment-card--inactive {
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  .investment-card--inactive::before,
+  .investment-card--inactive::after {
+    display: none;
+  }
+
+  /* Badge oben auf der aktiven Card */
+  .investment-badge {
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--color-gold);
+    color: var(--color-deep);
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    text-indent: 0.35em;
+    padding: 0.55rem 1.4rem;
+    white-space: nowrap;
+  }
+
+  /* Hervorhebung von Pre-Release-Boni innerhalb der Includes-Liste */
+  .investment-includes li.investment-extra {
+    color: var(--color-gold);
+    font-weight: 400;
+  }
+
+  .investment-includes li.investment-extra::before {
+    background: var(--color-gold);
+    width: 14px;
+  }
+
+  /* Erklärender Sub-Text unter einem Bonus-Bullet (z.B. Founding Member) */
+  .investment-extra-note {
+    display: block;
+    margin-top: 0.4rem;
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: var(--color-text-soft);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  /* Phase-Label statt CTA bei inaktiven Cards — gleiche Höhe für visuelle Konsistenz */
+  .investment-phase {
+    display: block;
+    text-align: center;
+    width: 100%;
+    padding: 1.3rem 1rem;
+    border: 1px dashed rgba(58, 46, 31, 0.3);
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.78rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    text-indent: 0.3em;
+    color: var(--color-text-soft);
+    margin-top: auto;
+  }
+
+  /* CTA klebt am Card-Boden, damit alle drei Cards optisch ausgerichtet bleiben */
+  .investment-card .investment-cta {
+    margin-top: auto;
+  }
+
+  /* Hinweis-Text unter den Cards */
+  .investment-footnote {
     text-align: center;
     margin-top: 3rem;
     font-family: var(--font-body);
     font-weight: 300;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--color-text-soft);
     line-height: 1.7;
-    max-width: 36em;
+    max-width: 38em;
     margin-left: auto;
     margin-right: auto;
   }
@@ -1911,8 +2002,19 @@
       margin: 0 auto;
     }
 
+    .investment-cards {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      max-width: 480px;
+    }
+
     .investment-card {
       padding: 3rem 2rem;
+    }
+
+    .investment-badge {
+      font-size: 0.6rem;
+      padding: 0.5rem 1.1rem;
     }
 
     .app-features {
@@ -2139,15 +2241,25 @@
     50%      { height: 14px; }
   }
 
-  /* Wenn Top-Nav sichtbar wird, Toggle zur Seite verschieben damit er nicht über dem CTA hängt */
-  .top-nav.is-visible ~ .audio-toggle {
-    top: calc(1.5rem + 4px);
-    right: calc(6vw + 220px);
+  /* Auf Mobile: Audio-Toggle bleibt RECHTS, rückt aber nach unten wenn Nav sichtbar */
+  @media (max-width: 768px) {
+    .audio-toggle {
+      width: 36px;
+      height: 36px;
+      top: 1rem;
+      right: 1rem;
+    }
+
+    body.has-nav-visible .audio-toggle {
+      top: 4.5rem;
+    }
   }
 
-  @media (max-width: 768px) {
-    .audio-toggle { width: 38px; height: 38px; top: 1rem; right: 1rem; }
-    .top-nav.is-visible ~ .audio-toggle { right: 1rem; top: 1rem; }
+  /* Desktop: Wenn Top-Nav sichtbar wird, Toggle nach UNTEN damit er unter „Platz sichern" sitzt */
+  @media (min-width: 769px) {
+    body.has-nav-visible .audio-toggle {
+      top: 5.5rem;
+    }
   }
 
   /* ==================== PARALLAX ==================== */
@@ -3447,6 +3559,7 @@
     <div class="app-body reveal reveal-delay-2">
       <p>Was nützt das beste Wissen, wenn es nicht trägt durch die Nacht. Die App Luzide ist gebaut für genau diesen Übergang. Vom Wissen ins Tun.</p>
       <p>Hier siehst du nur einen kleinen Ausschnitt. Die App bietet weit mehr.</p>
+      <p style="font-size: 0.85em; opacity: 0.75; margin-top: 1.6em;">Aktuell für Android. iOS folgt.</p>
     </div>
 
     <div class="app-features">
@@ -3546,31 +3659,79 @@
       </h2>
     </div>
 
-    <div class="investment-card reveal reveal-delay-2">
-      <div class="investment-tier">Pre-Release</div>
-      <div class="investment-name">KLARHEIT</div>
-      <div class="investment-subtitle">Meister der Luzidität</div>
+    <div class="investment-cards">
 
-      <div class="investment-price">999 €</div>
-      <div class="investment-price-note">einmalig &nbsp;·&nbsp; sofort starten</div>
+      <div class="investment-card investment-card--active reveal reveal-delay-2">
+        <div class="investment-badge">7 von 10 Plätzen frei</div>
 
-      <ul class="investment-includes">
-        <li>158 Lektionen über fünf Tore</li>
-        <li>50 begleitende Workbooks</li>
-        <li>Über 30 Stunden Videomaterial</li>
-        <li>Über 6 Stunden Audio-Übungen</li>
-        <li>App Luzide im KLARHEIT-Modus</li>
-        <li>Regelmäßige Updates</li>
-      </ul>
+        <div class="investment-tier">Pre-Release</div>
+        <div class="investment-name">KLARHEIT</div>
+        <div class="investment-subtitle">Meister der Luzidität</div>
 
-      <a href="https://www.deinlebendeinprojekt.de/klarheit" class="investment-cta" target="_blank" rel="noopener"><span>Platz sichern</span></a>
+        <div class="investment-price">999 €</div>
+        <div class="investment-price-note">einmalig &nbsp;·&nbsp; Kurs-Start 15. September 2026</div>
+
+        <ul class="investment-includes">
+          <li>158 Lektionen über fünf Tore</li>
+          <li>50 begleitende Workbooks</li>
+          <li>Über 30 Stunden Videomaterial</li>
+          <li>Über 6 Stunden Audio-Übungen</li>
+          <li class="investment-extra">6 Monate App Luzide gratis (Android)</li>
+          <li class="investment-extra">
+            Founding Member Status
+            <span class="investment-extra-note">2 Gruppen-Q&amp;A-Calls mit Joobin — 3 und 6 Monate nach Kursstart</span>
+          </li>
+        </ul>
+
+        <a href="https://www.deinlebendeinprojekt.de/klarheit" class="investment-cta" target="_blank" rel="noopener"><span>Platz sichern</span></a>
+      </div>
+
+      <div class="investment-card investment-card--inactive reveal reveal-delay-3">
+        <div class="investment-tier">Early Bird</div>
+        <div class="investment-name">KLARHEIT</div>
+        <div class="investment-subtitle">Meister der Luzidität</div>
+
+        <div class="investment-price">1599 €</div>
+        <div class="investment-price-note">einmalig &nbsp;·&nbsp; 30 Plätze · folgt nach Pre-Release</div>
+
+        <ul class="investment-includes">
+          <li>158 Lektionen über fünf Tore</li>
+          <li>50 begleitende Workbooks</li>
+          <li>Über 30 Stunden Videomaterial</li>
+          <li>Über 6 Stunden Audio-Übungen</li>
+          <li class="investment-extra">6 Monate App Luzide gratis (Android)</li>
+          <li class="investment-extra">
+            Founding Member Status
+            <span class="investment-extra-note">2 Gruppen-Q&amp;A-Calls mit Joobin — 3 und 6 Monate nach Kursstart</span>
+          </li>
+        </ul>
+
+        <div class="investment-phase">Phase 2 — folgt nach Pre-Release</div>
+      </div>
+
+      <div class="investment-card investment-card--inactive reveal reveal-delay-4">
+        <div class="investment-tier">Standard</div>
+        <div class="investment-name">KLARHEIT</div>
+        <div class="investment-subtitle">Meister der Luzidität</div>
+
+        <div class="investment-price">2199 €</div>
+        <div class="investment-price-note">einmalig &nbsp;·&nbsp; nach Early Bird</div>
+
+        <ul class="investment-includes">
+          <li>158 Lektionen über fünf Tore</li>
+          <li>50 begleitende Workbooks</li>
+          <li>Über 30 Stunden Videomaterial</li>
+          <li>Über 6 Stunden Audio-Übungen</li>
+          <li>App Luzide separat erhältlich</li>
+        </ul>
+
+        <div class="investment-phase">Phase 3 — später</div>
+      </div>
+
     </div>
 
-    <p class="investment-tiers-info reveal reveal-delay-3">
-      Pre-Release: 10 Plätze · 999 €<br>
-      Early Bird: 1599 €<br>
-      Standard: 2199 €<br>
-      Die App Luzide ist separat erhältlich.
+    <p class="investment-footnote reveal reveal-delay-4">
+      Kurs-Start: 15. September 2026 &nbsp;·&nbsp; App Luzide aktuell für Android, iOS folgt.
     </p>
   </div>
 </section>
@@ -3638,6 +3799,19 @@
 
       <div class="faq-item reveal">
         <button class="faq-question">
+          <span>Gibt es die App für iPhone?</span>
+          <span class="faq-toggle"></span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>Aktuell läuft die App Luzide auf Android. Eine iOS-Version ist in Entwicklung.</p>
+            <p>Pre-Release- und Early-Bird-Käufer mit iPhone bekommen ihre 6 Monate App-Zugang ab dem iOS-Start dazu — der Bonus geht nicht verloren.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-question">
           <span>Was, wenn ich in einer schwierigen Phase bin?</span>
           <span class="faq-toggle"></span>
         </button>
@@ -3667,7 +3841,7 @@
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
-            <p>Ja. Der Preis steigt nach dem Pre-Release auf 1599 €, später auf 2199 €. Die Plätze im Pre-Release sind auf 10 begrenzt.</p>
+            <p>Ja. Doch der Preis steigt. Der Pre-Release umfasst 10 Plätze für 999 €, mit 6 Monaten App Luzide gratis. Ab dem 15. September 2026 startet Early Bird mit 30 Plätzen für 1599 €, ebenfalls mit 6 Monaten App. Danach gilt der Standard-Preis von 2199 €.</p>
           </div>
         </div>
       </div>
@@ -4011,10 +4185,13 @@
   const topNav = document.getElementById('topNav');
   function updateNav() {
     const scrollY = window.scrollY;
-    if (scrollY > window.innerHeight * 0.6) {
+    const navVisible = scrollY > window.innerHeight * 0.6;
+    if (navVisible) {
       topNav?.classList.add('is-visible');
+      document.body.classList.add('has-nav-visible');
     } else {
       topNav?.classList.remove('is-visible');
+      document.body.classList.remove('has-nav-visible');
     }
     if (scrollY > 80) {
       topNav?.classList.add('is-scrolled');
@@ -4375,38 +4552,8 @@
     fadeRaf = requestAnimationFrame(step);
   }
 
-  // Scroll-gekoppeltes Fade
-  // Voll im Hero (0–60vh): Volume = TARGET
-  // Übergang (60–110vh): linear nach 0
-  // Darunter: gepauset
-  function updateAudioByScroll() {
-    if (!audio || audio.muted || audioUserPref === 'off') return;
-    const scrollY = window.scrollY;
-    const vh = window.innerHeight;
-    const fadeStart = vh * 0.6;
-    const fadeEnd = vh * 1.1;
-
-    let vol = TARGET_VOLUME;
-    if (scrollY <= fadeStart) {
-      vol = TARGET_VOLUME;
-    } else if (scrollY >= fadeEnd) {
-      vol = 0;
-    } else {
-      const t = (scrollY - fadeStart) / (fadeEnd - fadeStart);
-      vol = TARGET_VOLUME * (1 - t);
-    }
-
-    audio.volume = vol;
-
-    if (vol < 0.01 && !audio.paused) {
-      audio.pause();
-      audioFadingOut = true;
-    } else if (vol >= 0.01 && audio.paused && audioActivated) {
-      audio.play().catch(() => {});
-      audioFadingOut = false;
-    }
-  }
-  window.addEventListener('scroll', updateAudioByScroll, { passive: true });
+  // Kein Scroll-Fade mehr — Sound spielt durch bis User ihn manuell ausschaltet.
+  // Manuelle Steuerung über den Toggle oben links/rechts. Wahl wird in localStorage gemerkt.
 
   // ==================== FAQ ACCORDION ====================
 
