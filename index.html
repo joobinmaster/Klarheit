@@ -1,0 +1,4323 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KLARHEIT — Meister der Luzidität</title>
+
+<!-- SEO -->
+<meta name="description" content="KLARHEIT — Der Kurs für luzides Träumen und Bewusstheit. 158 Lektionen, 50 Workbooks, App Luzide. Geführt von Joobin.">
+<meta name="author" content="Joobin">
+<meta name="theme-color" content="#1a1612">
+<link rel="canonical" href="https://klarheit.com/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="KLARHEIT — Meister der Luzidität">
+<meta property="og:description" content="Der Kurs für luzides Träumen und Bewusstheit. 158 Lektionen über fünf Tore. Geführt von Joobin.">
+<meta property="og:image" content="hero-main.png">
+<meta property="og:locale" content="de_DE">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KLARHEIT — Meister der Luzidität">
+<meta name="twitter:description" content="Der Kurs für luzides Träumen und Bewusstheit.">
+<meta name="twitter:image" content="hero-main.png">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@200;300;400;500&display=swap" rel="stylesheet">
+
+<!-- Preload Hero -->
+<link rel="preload" as="image" href="hero-main.png" fetchpriority="high">
+
+<!-- GSAP + ScrollTrigger -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+<!-- Lenis Smooth Scroll -->
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+
+
+<style>
+  /* ==================== TOKENS ==================== */
+
+  :root {
+    --color-cream: #f4ede0;
+    --color-warm-white: #faf6ee;
+    --color-gold: #c9a96e;
+    --color-text-dark: #2a2620;
+    --color-text-soft: #5a544a;
+    --color-text-bronze: #3a2e1f;
+    --color-deep: #1a1612;
+    --font-display: 'Cormorant Garamond', serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: auto; /* Smooth scroll deaktiviert wegen ScrollTrigger */
+  }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--color-cream);
+    color: var(--color-text-dark);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ==================== INTRO OVERLAY ==================== */
+
+  .intro-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--color-deep);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition:
+      opacity 1.5s cubic-bezier(0.65, 0, 0.35, 1),
+      visibility 1.5s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .intro-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .intro-wordmark {
+    position: relative;
+    font-family: var(--font-body);
+    font-weight: 200;
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    letter-spacing: 0.5em;
+    color: var(--color-cream);
+    text-indent: 0.5em;
+    opacity: 0;
+    animation: wordmark-fade-in 2.5s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+  }
+
+  @keyframes wordmark-fade-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .intro-glow {
+    position: absolute;
+    bottom: 38%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0%;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(201, 169, 110, 0.6) 50%,
+      transparent 100%
+    );
+    opacity: 0;
+    animation: glow-line 2.5s cubic-bezier(0.65, 0, 0.35, 1) 1.4s forwards;
+  }
+
+  @keyframes glow-line {
+    0%   { opacity: 0; width: 0%; }
+    40%  { opacity: 0.8; width: 35%; }
+    100% { opacity: 0; width: 35%; }
+  }
+
+  /* ==================== HERO TRANSITION ==================== */
+
+  /* Kugel-Position als CSS-Variablen — feinjustierbar */
+  /* height: 0 + absolute child = nach dem Pin direkt mirror-section ohne Lücke */
+  .hero-transition {
+    position: relative;
+    height: 0;
+    --orb-x: 61%;
+    --orb-y: 58%;
+    --mask-radius: 0%;
+  }
+
+  /* Stage = das gepinnte Element. Absolute über hero-transition's 0-height. */
+  .hero-stage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 5;
+    overflow: hidden;
+    background-color: var(--color-cream);
+    opacity: 0;
+    animation: hero-fade-in 1.8s cubic-bezier(0.16, 1, 0.3, 1) 3.2s forwards;
+  }
+
+  @keyframes hero-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* Wrapper für Hero-Image — bekommt das ScrollTrigger scale */
+  .hero-image-wrapper {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    transform-origin: var(--orb-x) var(--orb-y);
+    will-change: transform, opacity;
+  }
+
+  /* Hero-Image selbst — behält die CSS Bildatmung */
+  .hero-image,
+  .hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transform: scale(1);
+    transform-origin: center center;
+    animation: hero-image-breath 16s ease-in-out 4.5s infinite alternate;
+    will-change: transform;
+  }
+
+  /* Wenn ein Hero-Video da ist, atmet es nicht (Video bewegt sich schon selbst) */
+  .hero-video { animation: none; }
+
+  @keyframes hero-image-breath {
+    from { transform: scale(1); }
+    to   { transform: scale(1.08); }
+  }
+
+  /* Orb-Inside — initial unsichtbar, wird durch Maske enthüllt */
+  .orb-inside {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 2;
+    opacity: 0;
+    clip-path: circle(var(--mask-radius) at var(--orb-x) var(--orb-y));
+    will-change: clip-path, opacity;
+  }
+
+  /* Helligkeits-Verlauf links für Text-Lesbarkeit */
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    background: linear-gradient(
+      90deg,
+      rgba(244, 237, 224, 0.28) 0%,
+      rgba(244, 237, 224, 0.06) 38%,
+      transparent 62%
+    );
+    pointer-events: none;
+  }
+
+  /* ==================== HERO CONTENT ==================== */
+
+  .hero-content {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 100%;
+    z-index: 10;
+    padding: 0 6vw;
+    will-change: opacity, transform;
+  }
+
+  .hero-headline {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(1.7rem, 3vw, 2.6rem);
+    line-height: 1.4;
+    color: var(--color-text-dark);
+    max-width: 46%;
+    margin-bottom: 6rem;
+    letter-spacing: -0.005em;
+  }
+
+  .hero-headline .line-group {
+    display: block;
+    margin-bottom: 1em;
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .hero-headline .line-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .hero-headline .line {
+    display: block;
+  }
+
+  .hero-headline .line-group:nth-child(2) {
+    font-style: italic;
+    color: var(--color-text-soft);
+  }
+
+  .hero-headline .line-group:nth-child(1) {
+    animation: line-rise 1.6s cubic-bezier(0.16, 1, 0.3, 1) 4.8s forwards;
+  }
+
+  .hero-headline .line-group:nth-child(2) {
+    animation: line-rise 1.6s cubic-bezier(0.16, 1, 0.3, 1) 6s forwards;
+  }
+
+  @keyframes line-rise {
+    from { opacity: 0; transform: translateY(12px); filter: blur(5px); }
+    to   { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+
+  .hero-meta {
+    max-width: 46%;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: line-rise 1.4s cubic-bezier(0.16, 1, 0.3, 1) 7.2s forwards;
+  }
+
+  .hero-coursename {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+    letter-spacing: 0.4em;
+    color: var(--color-text-bronze);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    text-indent: 0.4em;
+  }
+
+  .hero-subline {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: clamp(0.82rem, 1.05vw, 0.95rem);
+    color: var(--color-text-soft);
+    letter-spacing: 0.05em;
+    line-height: 1.6;
+  }
+
+  /* ==================== SCROLL INDICATOR ==================== */
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    opacity: 0;
+    animation: scroll-fade-in 1.5s ease-out 8.4s forwards;
+    will-change: opacity;
+  }
+
+  @keyframes scroll-fade-in {
+    from { opacity: 0; transform: translate(-50%, 8px); }
+    to   { opacity: 1; transform: translate(-50%, 0); }
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 42px;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(201, 169, 110, 0.5) 100%
+    );
+    margin: 0 auto;
+  }
+
+  .scroll-label {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.65rem;
+    letter-spacing: 0.45em;
+    color: var(--color-text-soft);
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 0.9rem;
+    text-indent: 0.45em;
+    opacity: 0.75;
+  }
+
+  /* ==================== MIRROR SECTION ==================== */
+  /* Statisches Editorial-Layout: 6 Zeilen vertikal mittig, alle sichtbar.
+     Hierarchie der letzten drei durch Typografie (Größe + Farbe + Italic),
+     nicht durch Bewegung.
+
+     opacity: 0 initial, damit nicht durch den Hero-Übergang schimmert.
+     Wird per ScrollTrigger sichtbar. */
+
+  .mirror-section {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--color-deep);
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.4s ease-out,
+      visibility 0s 0.4s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mirror-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Während des Hero-Übergangs liegt die Section fixed über dem Viewport,
+     damit sie sofort am Top klebt ohne durch den Pin-Spacer scrollen zu müssen */
+  .mirror-section.is-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 6; /* über der hero-stage (z-index 5) */
+  }
+
+  .mirror-section.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity 0.4s ease-out,
+      visibility 0s;
+  }
+
+  /* Subtiler radialer Helligkeits-Layer für Text-Lesbarkeit */
+  .mirror-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(244, 237, 224, 0.32) 0%,
+      rgba(244, 237, 224, 0.14) 50%,
+      transparent 80%
+    );
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .mirror-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 900px;
+    padding: 8vh 6vw;
+    text-align: center;
+  }
+
+  .mirror-line {
+    display: block;
+    font-family: var(--font-display);
+    line-height: 1.4;
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  /* ===== Erste drei Sätze: kleiner, soft, gedämpft ===== */
+
+  .mirror-line.line-soft-1,
+  .mirror-line.line-soft-2,
+  .mirror-line.line-soft-3 {
+    font-weight: 300;
+    font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+    color: var(--color-text-soft);
+    margin-bottom: 1.4em;
+    letter-spacing: 0.005em;
+  }
+
+  /* Headline = Soft 1, leicht hervorgehoben */
+  .mirror-line.line-soft-1 {
+    font-weight: 400;
+    font-size: clamp(1.2rem, 1.8vw, 1.55rem);
+    color: var(--color-text-dark);
+    margin-bottom: 1.8em;
+  }
+
+  /* ===== Trennraum zwischen Block 1 und Block 2 ===== */
+
+  .mirror-divider {
+    width: 60px;
+    height: 1px;
+    background: rgba(201, 169, 110, 0.4);
+    margin: 1.5em auto 2.5em;
+    opacity: 0;
+    transform: scaleX(0.3);
+    transform-origin: center center;
+    transition:
+      opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ===== Letzte drei Sätze: groß, prominent, dark ===== */
+
+  .mirror-line.line-strong-1,
+  .mirror-line.line-strong-2 {
+    font-weight: 400;
+    font-size: clamp(1.7rem, 2.8vw, 2.4rem);
+    color: var(--color-text-dark);
+    margin-bottom: 0.8em;
+    letter-spacing: -0.005em;
+  }
+
+  .mirror-line.line-strong-3 {
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(1.7rem, 2.8vw, 2.4rem);
+    color: var(--color-text-soft);
+    margin-bottom: 0;
+  }
+
+  /* ===== Reveal-Animation: sequentielles Einfaden ===== */
+
+  .mirror-section.is-visible .mirror-line {
+    transition:
+      opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Stagger-Verzögerungen */
+  .mirror-section.is-visible .mirror-line.line-soft-1   { transition-delay: 0.0s; }
+  .mirror-section.is-visible .mirror-line.line-soft-2   { transition-delay: 0.25s; }
+  .mirror-section.is-visible .mirror-line.line-soft-3   { transition-delay: 0.5s; }
+  .mirror-section.is-visible .mirror-divider            { transition-delay: 0.85s; opacity: 1; transform: scaleX(1); }
+  .mirror-section.is-visible .mirror-line.line-strong-1 { transition-delay: 1.1s; }
+  .mirror-section.is-visible .mirror-line.line-strong-2 { transition-delay: 1.35s; }
+  .mirror-section.is-visible .mirror-line.line-strong-3 { transition-delay: 1.6s; }
+
+  /* Wort-für-Wort Reveal */
+  .mirror-line .word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 0.5s ease-out,
+      transform 0.5s ease-out;
+  }
+
+  .mirror-line .word.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ==================== UMBENNANT VARS für Sektionen ==================== */
+  /* Reusable patterns für die Premium-Sektionen */
+
+  .section {
+    position: relative;
+    width: 100%;
+    background: var(--color-cream);
+  }
+
+  .section-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 6vw;
+  }
+
+  .section-eyebrow {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.7rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--color-text-bronze);
+    text-indent: 0.5em;
+    margin-bottom: 1.8rem;
+    opacity: 0.85;
+  }
+
+  .section-headline {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    line-height: 1.2;
+    color: var(--color-text-dark);
+    letter-spacing: -0.005em;
+  }
+
+  .section-headline em {
+    font-style: italic;
+    color: var(--color-text-soft);
+  }
+
+  .section-body {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: clamp(1rem, 1.2vw, 1.15rem);
+    line-height: 1.75;
+    color: var(--color-text-soft);
+    max-width: 36em;
+  }
+
+  .section-body p + p {
+    margin-top: 1.4em;
+  }
+
+  /* Universelle Reveal-Klasse für scroll-getriggerte Einblendungen */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-delay-1 { transition-delay: 0.15s; }
+  .reveal-delay-2 { transition-delay: 0.3s; }
+  .reveal-delay-3 { transition-delay: 0.45s; }
+  .reveal-delay-4 { transition-delay: 0.6s; }
+
+  /* Goldlinie als wiederkehrendes Element */
+  .gold-line {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(201, 169, 110, 0.6) 50%,
+      transparent
+    );
+    margin: 2rem 0;
+  }
+
+  .gold-line-vertical {
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(201, 169, 110, 0.5) 50%,
+      transparent
+    );
+    margin: 0 auto;
+  }
+
+  /* ==================== SEKTION 3: WAS IST LUZIDES TRÄUMEN ==================== */
+
+  .section-definition {
+    position: relative;
+    min-height: 100vh;
+    background-image: url('golden-path-through-serene-landscape.png');
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Cream-Verlauf links für Lesbarkeit, sanftes Auslaufen rechts */
+  .section-definition::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(244, 237, 224, 0.96) 0%,
+      rgba(244, 237, 224, 0.85) 30%,
+      rgba(244, 237, 224, 0.4) 55%,
+      rgba(244, 237, 224, 0.1) 75%,
+      transparent 100%
+    );
+    z-index: 1;
+  }
+
+  .section-definition .section-inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 14vh 6vw 12vh;
+  }
+
+  .definition-text {
+    max-width: 36em;
+  }
+
+  .definition-text .section-headline {
+    margin-bottom: 2rem;
+  }
+
+  .definition-quote {
+    margin-top: 3rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+    color: var(--color-text-bronze);
+    line-height: 1.5;
+    border-left: 1px solid rgba(201, 169, 110, 0.4);
+    padding-left: 1.5rem;
+    max-width: 30em;
+  }
+
+  /* ==================== SEKTION 4: STORIES ==================== */
+
+  .section-stories {
+    padding: 14vh 0 12vh;
+    background: var(--color-cream);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stories-header {
+    text-align: center;
+    margin-bottom: 6vh;
+    max-width: 32em;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 6vw;
+  }
+
+  .stories-header .section-headline {
+    margin-bottom: 1.5rem;
+  }
+
+  /* Bühne — Video als visueller Anker, kein Text drauf */
+  .stories-stage {
+    position: relative;
+    margin: 0 auto 6vh;
+    max-width: 1400px;
+    aspect-ratio: 21/9;
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 0 40px 100px -40px rgba(42, 38, 32, 0.22);
+    background-color: var(--color-deep);
+  }
+
+  .stories-stage-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+  }
+
+  .stories-stage::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      transparent 60%,
+      rgba(244, 237, 224, 0.2) 100%
+    );
+  }
+
+  /* Drei Editorial-Karten unter der Bühne */
+  .story-cards {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 6vw;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 4vw;
+  }
+
+  .story-card {
+    text-align: center;
+    padding: 0 1rem;
+    position: relative;
+  }
+
+  .story-card-marker {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(201, 169, 110, 0.5)
+    );
+    margin: 0 auto 1.8rem;
+  }
+
+  .story-card-name {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.4rem, 1.9vw, 1.7rem);
+    color: var(--color-text-dark);
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.005em;
+  }
+
+  .story-card-year {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    color: var(--color-text-bronze);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    text-indent: 0.4em;
+  }
+
+  .story-card-text {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: clamp(0.95rem, 1.05vw, 1.05rem);
+    line-height: 1.7;
+    color: var(--color-text-soft);
+    max-width: 24em;
+    margin: 0 auto;
+  }
+
+  .stories-conclusion {
+    text-align: center;
+    margin-top: 8vh;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.3rem, 2vw, 1.7rem);
+    color: var(--color-text-dark);
+    max-width: 32em;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 6vw;
+  }
+
+  /* ==================== SEKTION 5: WENDEPUNKT ==================== */
+
+  .section-pivot {
+    position: relative;
+    min-height: 100vh;
+    background-color: var(--color-deep);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .pivot-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .section-pivot::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      rgba(244, 237, 224, 0.5) 0%,
+      rgba(244, 237, 224, 0.18) 35%,
+      transparent 65%
+    );
+  }
+
+  .pivot-content {
+    position: relative;
+    z-index: 2;
+    max-width: 38em;
+    padding: 0 6vw;
+  }
+
+  .pivot-headline {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+    line-height: 1.15;
+    color: var(--color-text-dark);
+    margin-bottom: 2rem;
+    letter-spacing: -0.005em;
+  }
+
+  .pivot-headline strong {
+    font-weight: 400;
+  }
+
+  .pivot-headline em {
+    font-style: italic;
+    color: var(--color-text-bronze);
+  }
+
+  .pivot-body {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: clamp(1.05rem, 1.25vw, 1.2rem);
+    line-height: 1.75;
+    color: var(--color-text-dark);
+  }
+
+  .pivot-body p + p {
+    margin-top: 1.4em;
+  }
+
+  /* ==================== SEKTION 6: FÜNF TORE ==================== */
+
+  .section-gates {
+    padding: 14vh 0 12vh;
+    background: var(--color-cream);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gates-header {
+    text-align: center;
+    margin-bottom: 8vh;
+    padding: 0 6vw;
+  }
+
+  .gates-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 6vw;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 5vw;
+    align-items: center;
+  }
+
+  .gates-image {
+    position: relative;
+    aspect-ratio: 4/5;
+    background-image: url('serene-arches-in-a-golden-landscape.png');
+    background-size: cover;
+    background-position: center;
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 0 40px 100px -40px rgba(42, 38, 32, 0.25);
+  }
+
+  .gates-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      transparent 50%,
+      rgba(244, 237, 224, 0.15) 100%
+    );
+  }
+
+  .gate-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .gate-item {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 2rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(201, 169, 110, 0.18);
+    align-items: baseline;
+    transition: transform 0.4s ease;
+  }
+
+  .gate-item:last-child {
+    border-bottom: none;
+  }
+
+  .gate-number {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(1.3rem, 1.6vw, 1.5rem);
+    color: var(--color-text-bronze);
+    letter-spacing: 0.05em;
+  }
+
+  .gate-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .gate-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.25rem, 1.6vw, 1.5rem);
+    color: var(--color-text-dark);
+    letter-spacing: -0.005em;
+  }
+
+  .gate-description {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: clamp(0.88rem, 1vw, 0.98rem);
+    line-height: 1.6;
+    color: var(--color-text-soft);
+  }
+
+  /* Threshold-Item für Stufe 0 */
+  .gate-item.threshold {
+    margin-bottom: 0.8rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(201, 169, 110, 0.35);
+  }
+
+  .gate-item.threshold .gate-number {
+    color: var(--color-text-soft);
+  }
+
+  .gate-item.threshold .gate-title {
+    font-style: italic;
+    color: var(--color-text-soft);
+  }
+
+  /* ==================== SEKTION 7: ÖKOSYSTEM ==================== */
+
+  .section-ecosystem {
+    padding: 14vh 0 12vh;
+    background: linear-gradient(
+      180deg,
+      var(--color-cream) 0%,
+      var(--color-warm-white) 100%
+    );
+    position: relative;
+  }
+
+  .ecosystem-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 5vw;
+    align-items: center;
+  }
+
+  .ecosystem-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 2px;
+    box-shadow: 0 40px 90px -30px rgba(42, 38, 32, 0.22);
+    aspect-ratio: 1672 / 941; /* exakt das Bild → kein Rand, kein Crop */
+  }
+
+  .ecosystem-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .ecosystem-text .section-headline {
+    margin-bottom: 3rem;
+  }
+
+  .ecosystem-pillars {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+  }
+
+  .pillar {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    gap: 1.5rem;
+    align-items: baseline;
+  }
+
+  .pillar-number {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-style: italic;
+    font-size: 1.5rem;
+    color: var(--color-text-bronze);
+  }
+
+  .pillar-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .pillar-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.3rem, 1.7vw, 1.6rem);
+    color: var(--color-text-dark);
+  }
+
+  .pillar-description {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--color-text-soft);
+  }
+
+  /* ==================== SEKTION 8: APP ==================== */
+
+  .section-app {
+    position: relative;
+    min-height: 100vh;
+    background-image: url('serene-evening-devices-on-a-minimalist-table.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .section-app::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(20, 16, 12, 0.6) 0%,
+      rgba(20, 16, 12, 0.3) 40%,
+      transparent 70%
+    );
+  }
+
+  .app-content {
+    position: relative;
+    z-index: 2;
+    max-width: 42em;
+    padding: 12vh 6vw;
+    color: var(--color-warm-white);
+  }
+
+  .app-eyebrow {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.7rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: rgba(224, 193, 132, 0.9);
+    text-indent: 0.5em;
+    margin-bottom: 1.8rem;
+  }
+
+  .app-headline {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    line-height: 1.2;
+    color: var(--color-warm-white);
+    margin-bottom: 2rem;
+    letter-spacing: -0.005em;
+  }
+
+  .app-body {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: clamp(1rem, 1.2vw, 1.15rem);
+    line-height: 1.75;
+    color: rgba(244, 237, 224, 0.9);
+    margin-bottom: 3.5rem;
+    max-width: 32em;
+  }
+
+  /* Glas-Cards für Features */
+  .app-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .app-feature {
+    background: rgba(244, 237, 224, 0.06);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid rgba(201, 169, 110, 0.2);
+    padding: 1.6rem 1.4rem;
+    border-radius: 2px;
+    transition: background 0.4s ease, border-color 0.4s ease;
+  }
+
+  .app-feature:hover {
+    background: rgba(244, 237, 224, 0.1);
+    border-color: rgba(201, 169, 110, 0.35);
+  }
+
+  .app-feature-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.1rem;
+    color: var(--color-warm-white);
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.005em;
+  }
+
+  .app-feature-text {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    color: rgba(244, 237, 224, 0.75);
+  }
+
+  /* ==================== SEKTION 9: EHRLICHKEIT ==================== */
+
+  .section-honesty {
+    position: relative;
+    padding: 14vh 0 12vh;
+    background-image: url('golden-door.png');
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+  }
+
+  /* Cream-Overlay für Lesbarkeit, lässt das Bild dezent durchscheinen */
+  .section-honesty::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(250, 246, 238, 0.92) 0%,
+      rgba(250, 246, 238, 0.85) 50%,
+      rgba(250, 246, 238, 0.92) 100%
+    );
+    z-index: 1;
+  }
+
+  .section-honesty .section-inner {
+    position: relative;
+    z-index: 2;
+  }
+
+  .honesty-header {
+    text-align: center;
+    margin-bottom: 8vh;
+    max-width: 32em;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .honesty-grid {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 5vw;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .honesty-divider {
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(201, 169, 110, 0.3) 20%,
+      rgba(201, 169, 110, 0.3) 80%,
+      transparent
+    );
+  }
+
+  .honesty-column {
+    padding: 0 1rem;
+  }
+
+  .honesty-column h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.4rem, 1.9vw, 1.7rem);
+    color: var(--color-text-dark);
+    margin-bottom: 2rem;
+    letter-spacing: -0.005em;
+  }
+
+  .honesty-column ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .honesty-column li {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: clamp(0.95rem, 1.05vw, 1.05rem);
+    line-height: 1.7;
+    color: var(--color-text-soft);
+    padding: 0.7rem 0;
+    border-bottom: 1px solid rgba(42, 38, 32, 0.06);
+  }
+
+  .honesty-column li:last-child {
+    border-bottom: none;
+  }
+
+  /* ==================== SEKTION 10: JOOBIN ==================== */
+
+  .section-joobin {
+    position: relative;
+    padding: 16vh 0 14vh;
+    background-image: url('joobin-guidance-two-spheres.png');
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  /* Cream-Overlay damit Bild als Atmosphäre wirkt, Text gut lesbar bleibt */
+  .section-joobin::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(250, 246, 238, 0.85) 0%,
+      rgba(244, 237, 224, 0.75) 50%,
+      rgba(244, 237, 224, 0.85) 100%
+    );
+    z-index: 1;
+  }
+
+  .section-joobin .section-inner {
+    position: relative;
+    z-index: 2;
+  }
+
+  .joobin-portrait {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 3rem;
+    position: relative;
+    box-shadow:
+      0 30px 60px -25px rgba(42, 38, 32, 0.28),
+      0 0 0 1px rgba(201, 169, 110, 0.45);
+    transform: translateZ(0); /* GPU-Layer für sauberes Sampling */
+  }
+
+  .joobin-portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 22%;
+    display: block;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  @media (max-width: 768px) {
+    .joobin-portrait {
+      width: 160px;
+      height: 160px;
+      margin-bottom: 2.4rem;
+    }
+  }
+
+  .joobin-quote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1.6rem, 3vw, 2.5rem);
+    line-height: 1.4;
+    color: var(--color-text-dark);
+    max-width: 24em;
+    margin: 0 auto 5rem;
+    letter-spacing: -0.005em;
+  }
+
+  .joobin-text {
+    max-width: 36em;
+    margin: 0 auto;
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: clamp(1rem, 1.15vw, 1.1rem);
+    line-height: 1.8;
+    color: var(--color-text-soft);
+    text-align: left;
+  }
+
+  .joobin-text p + p {
+    margin-top: 1.4em;
+  }
+
+  .joobin-signature {
+    margin-top: 3rem;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.3rem;
+    color: var(--color-text-bronze);
+    text-align: center;
+  }
+
+  /* ==================== SEKTION 11: INVESTMENT ==================== */
+
+  .section-investment {
+    position: relative;
+    padding: 14vh 0 12vh;
+    background-image: url('investment-crystal-sphere-pedestal-01.png');
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+  }
+
+  /* Cream-Overlay — Bild sichtbar als atmosphärischer Background */
+  .section-investment::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(244, 237, 224, 0.88) 0%,
+      rgba(244, 237, 224, 0.7) 50%,
+      rgba(244, 237, 224, 0.88) 100%
+    );
+    z-index: 1;
+  }
+
+  .section-investment .section-inner {
+    position: relative;
+    z-index: 2;
+  }
+
+  .investment-header {
+    text-align: center;
+    margin-bottom: 6vh;
+  }
+
+  .investment-card {
+    max-width: 640px;
+    margin: 0 auto;
+    background: var(--color-warm-white);
+    border: 1px solid rgba(201, 169, 110, 0.3);
+    padding: 5rem 4rem;
+    position: relative;
+  }
+
+  .investment-card::before,
+  .investment-card::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--color-gold);
+  }
+
+  .investment-card::before {
+    top: -1px;
+    left: -1px;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .investment-card::after {
+    bottom: -1px;
+    right: -1px;
+    border-left: none;
+    border-top: none;
+  }
+
+  .investment-tier {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.7rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--color-text-bronze);
+    text-indent: 0.5em;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .investment-name {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.8rem, 2.5vw, 2.2rem);
+    color: var(--color-text-dark);
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .investment-subtitle {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--color-text-soft);
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .investment-price {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(3rem, 5vw, 4.5rem);
+    color: var(--color-text-dark);
+    text-align: center;
+    margin-bottom: 0.5rem;
+    line-height: 1;
+  }
+
+  .investment-price-note {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.85rem;
+    color: var(--color-text-soft);
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .investment-includes {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 3rem;
+  }
+
+  .investment-includes li {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.98rem;
+    line-height: 1.65;
+    color: var(--color-text-dark);
+    padding: 0.8rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    border-bottom: 1px solid rgba(42, 38, 32, 0.06);
+  }
+
+  .investment-includes li:last-child {
+    border-bottom: none;
+  }
+
+  .investment-includes li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 1.35em;
+    width: 8px;
+    height: 1px;
+    background: var(--color-gold);
+  }
+
+  .investment-cta {
+    display: block;
+    text-align: center;
+    width: 100%;
+    padding: 1.3rem 2rem;
+    background: var(--color-deep);
+    color: var(--color-warm-white);
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.85rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    text-indent: 0.4em;
+    text-decoration: none;
+    border: 1px solid rgba(201, 169, 110, 0.5);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.5s ease, color 0.5s ease;
+  }
+
+  /* Gold-Sweep beim Hover — Lichtstreif wandert über den Button */
+  .investment-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(201, 169, 110, 0.25),
+      transparent
+    );
+    transition: left 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .investment-cta:hover {
+    border-color: rgba(201, 169, 110, 0.85);
+    color: #f0d9a8;
+  }
+
+  .investment-cta:hover::before {
+    left: 100%;
+  }
+
+  .investment-cta span {
+    position: relative;
+    z-index: 1;
+  }
+
+  .investment-tiers-info {
+    text-align: center;
+    margin-top: 3rem;
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.9rem;
+    color: var(--color-text-soft);
+    line-height: 1.7;
+    max-width: 36em;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ==================== SEKTION 12: FAQ ==================== */
+
+  .section-faq {
+    position: relative;
+    padding: 14vh 0 12vh;
+    background-image: url('faq-gold-lines-background.png');
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+  }
+
+  /* Sehr starkes Overlay — Bild nur als Hauch im Hintergrund */
+  .section-faq::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(250, 246, 238, 0.94) 0%,
+      rgba(250, 246, 238, 0.9) 50%,
+      rgba(250, 246, 238, 0.94) 100%
+    );
+    z-index: 1;
+  }
+
+  .section-faq .section-inner {
+    position: relative;
+    z-index: 2;
+  }
+
+  .faq-header {
+    text-align: center;
+    margin-bottom: 6vh;
+  }
+
+  .faq-list {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid rgba(42, 38, 32, 0.1);
+  }
+
+  .faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 1.8rem 0;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.05rem, 1.3vw, 1.25rem);
+    color: var(--color-text-dark);
+    transition: color 0.3s ease;
+  }
+
+  .faq-question:hover {
+    color: var(--color-text-bronze);
+  }
+
+  .faq-toggle {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    position: relative;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .faq-toggle::before,
+  .faq-toggle::after {
+    content: '';
+    position: absolute;
+    background: var(--color-gold);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .faq-toggle::before {
+    width: 100%;
+    height: 1px;
+    top: 50%;
+    left: 0;
+  }
+
+  .faq-toggle::after {
+    width: 1px;
+    height: 100%;
+    left: 50%;
+    top: 0;
+  }
+
+  .faq-item.is-open .faq-toggle::after {
+    transform: scaleY(0);
+  }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .faq-answer-inner {
+    padding: 0 0 2rem;
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+    line-height: 1.75;
+    color: var(--color-text-soft);
+    max-width: 38em;
+  }
+
+  .faq-answer-inner p + p {
+    margin-top: 1em;
+  }
+
+  /* ==================== SEKTION 13: FINAL CTA ==================== */
+
+  .section-final {
+    position: relative;
+    min-height: 100vh;
+    background-image: url('golden-path-to-infinity.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .section-final::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(244, 237, 224, 0.45) 0%,
+      rgba(244, 237, 224, 0.15) 40%,
+      transparent 70%
+    );
+  }
+
+  .final-content {
+    position: relative;
+    z-index: 2;
+    max-width: 36em;
+    padding: 0 6vw;
+  }
+
+  .final-headline {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(2.4rem, 5vw, 4.2rem);
+    line-height: 1.15;
+    color: var(--color-text-dark);
+    margin-bottom: 2rem;
+    letter-spacing: -0.005em;
+  }
+
+  .final-headline em {
+    font-style: italic;
+    color: var(--color-text-bronze);
+  }
+
+  .final-body {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: clamp(1rem, 1.2vw, 1.15rem);
+    line-height: 1.75;
+    color: var(--color-text-dark);
+    margin-bottom: 3.5rem;
+  }
+
+  .final-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    padding: 1.4rem 3.5rem;
+    background: var(--color-deep);
+    color: var(--color-warm-white);
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.85rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid rgba(201, 169, 110, 0.5);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.5s ease, color 0.5s ease;
+  }
+
+  .final-cta .magnetic-inner {
+    padding-left: 0.4em; /* kompensiert letter-spacing rechts → optisch zentriert */
+    white-space: nowrap;
+  }
+
+  .final-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(201, 169, 110, 0.25),
+      transparent
+    );
+    transition: left 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .final-cta:hover {
+    border-color: rgba(201, 169, 110, 0.85);
+    color: #f0d9a8;
+  }
+
+  .final-cta:hover::before {
+    left: 100%;
+  }
+
+  .final-cta span {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ==================== MOBILE ANPASSUNGEN für neue Sektionen ==================== */
+
+  @media (max-width: 768px) {
+    .section-definition .section-grid,
+    .ecosystem-grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .definition-image,
+    .ecosystem-image {
+      aspect-ratio: 16/10;
+    }
+
+    .stories-stage,
+    .gates-stage {
+      aspect-ratio: 4/5;
+    }
+
+    .story-panels {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+    }
+
+    .gate-item {
+      grid-template-columns: 50px 1fr;
+      gap: 1.2rem;
+    }
+
+    .honesty-grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .honesty-divider {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201, 169, 110, 0.3), transparent);
+      margin: 0 auto;
+    }
+
+    .investment-card {
+      padding: 3rem 2rem;
+    }
+
+    .app-features {
+      grid-template-columns: 1fr;
+      gap: 1.4rem;
+    }
+
+    .section-pivot {
+      background-attachment: scroll;
+    }
+  }
+
+
+  /* ==================== MOBILE ==================== */
+
+  @media (max-width: 768px) {
+    .intro-wordmark {
+      font-size: clamp(1.8rem, 9vw, 3rem);
+      letter-spacing: 0.4em;
+    }
+
+    .hero-transition {
+      --orb-x: 72%;
+      --orb-y: 55%;
+    }
+
+    .hero-content {
+      top: 42%;
+      padding: 0 2rem;
+    }
+
+    .hero-headline {
+      max-width: 100%;
+      font-size: clamp(1.35rem, 5.5vw, 2rem);
+      line-height: 1.45;
+      margin-bottom: 3.6rem;
+    }
+
+    .hero-headline .line-group {
+      margin-bottom: 0.9em;
+    }
+
+    .hero-meta {
+      max-width: 100%;
+    }
+
+    .hero-coursename {
+      font-size: 0.78rem;
+      letter-spacing: 0.32em;
+    }
+
+    .hero-subline {
+      font-size: 0.82rem;
+    }
+
+    .hero-image,
+    .orb-inside {
+      object-position: 72% center;
+    }
+
+    .hero-overlay {
+      background: linear-gradient(
+        180deg,
+        rgba(244, 237, 224, 0.55) 0%,
+        rgba(244, 237, 224, 0.15) 48%,
+        transparent 70%
+      );
+    }
+
+    .scroll-indicator {
+      bottom: 1.8rem;
+    }
+
+    .scroll-line {
+      height: 32px;
+    }
+
+    /* Mirror-Section Mobile */
+    .mirror-content {
+      padding: 6vh 1.5rem;
+    }
+
+    .mirror-line.line-soft-1 {
+      font-size: clamp(1.05rem, 4.8vw, 1.3rem);
+      margin-bottom: 1.6em;
+    }
+
+    .mirror-line.line-soft-2,
+    .mirror-line.line-soft-3 {
+      font-size: clamp(0.95rem, 4.2vw, 1.15rem);
+      margin-bottom: 1.3em;
+    }
+
+    .mirror-line.line-strong-1,
+    .mirror-line.line-strong-2,
+    .mirror-line.line-strong-3 {
+      font-size: clamp(1.4rem, 6vw, 1.85rem);
+    }
+
+    .mirror-divider {
+      margin: 1em auto 2em;
+      width: 48px;
+    }
+
+    .mirror-section::before {
+      background: radial-gradient(
+        ellipse at center,
+        rgba(244, 237, 224, 0.4) 0%,
+        rgba(244, 237, 224, 0.15) 50%,
+        transparent 80%
+      );
+    }
+  }
+
+  /* ==================== AUDIO TOGGLE ==================== */
+
+  .audio-toggle {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 1100;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(201, 169, 110, 0.55);
+    background: rgba(20, 16, 12, 0.55);
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition:
+      opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.4s ease,
+      background 0.4s ease;
+    pointer-events: none;
+  }
+
+  .audio-toggle.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .audio-toggle:hover {
+    border-color: var(--color-gold);
+    background: rgba(20, 16, 12, 0.75);
+  }
+
+  .audio-toggle .audio-bars {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    height: 16px;
+  }
+
+  .audio-toggle .audio-bars span {
+    width: 2px;
+    background: rgba(240, 217, 168, 0.85);
+    border-radius: 1px;
+    transition: height 0.3s ease, background 0.3s ease;
+  }
+
+  .audio-toggle.is-playing .audio-bars span {
+    animation: audio-bar-bounce 1.2s ease-in-out infinite;
+    background: var(--color-gold);
+  }
+
+  .audio-toggle .audio-bars span:nth-child(1) { height: 6px;  animation-delay: 0s; }
+  .audio-toggle .audio-bars span:nth-child(2) { height: 12px; animation-delay: 0.15s; }
+  .audio-toggle .audio-bars span:nth-child(3) { height: 8px;  animation-delay: 0.3s; }
+  .audio-toggle .audio-bars span:nth-child(4) { height: 14px; animation-delay: 0.45s; }
+
+  .audio-toggle:not(.is-playing) .audio-bars span {
+    height: 6px;
+    opacity: 0.5;
+  }
+
+  @keyframes audio-bar-bounce {
+    0%, 100% { height: 4px; }
+    50%      { height: 14px; }
+  }
+
+  /* Wenn Top-Nav sichtbar wird, Toggle zur Seite verschieben damit er nicht über dem CTA hängt */
+  .top-nav.is-visible ~ .audio-toggle {
+    top: calc(1.5rem + 4px);
+    right: calc(6vw + 220px);
+  }
+
+  @media (max-width: 768px) {
+    .audio-toggle { width: 38px; height: 38px; top: 1rem; right: 1rem; }
+    .top-nav.is-visible ~ .audio-toggle { right: 1rem; top: 1rem; }
+  }
+
+  /* ==================== PARALLAX ==================== */
+  /* Background-Bilder driften langsamer als der Inhalt — gibt sofortige Tiefe.
+     CSS-only über translateZ + transform-style: preserve-3d wäre noch glatter,
+     aber wir nutzen einen JS-RAF, der die --parallax-y Variable setzt. */
+
+  .parallax-bg {
+    will-change: transform;
+    transform: translate3d(0, var(--parallax-y, 0), 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* ==================== STORY CARDS — HOVER LIFT ==================== */
+
+  .story-card {
+    transition:
+      transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+      filter 0.6s ease;
+    cursor: default;
+  }
+
+  .story-card:hover {
+    transform: translateY(-14px);
+    filter: drop-shadow(0 30px 50px rgba(201, 169, 110, 0.32));
+  }
+
+  .story-card-marker {
+    transition:
+      height 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+      background 0.6s ease;
+  }
+
+  .story-card:hover .story-card-marker {
+    height: 64px;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(201, 169, 110, 0.85)
+    );
+  }
+
+  .story-card:hover .story-card-name {
+    color: var(--color-text-bronze);
+    transition: color 0.5s ease;
+  }
+
+  /* ==================== INVESTMENT CARD — CORNER PULSE ==================== */
+
+  .investment-card {
+    transition: border-color 0.6s ease;
+  }
+
+  .investment-card::before,
+  .investment-card::after {
+    transition:
+      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.7s ease,
+      width 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+      height 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .investment-card:hover::before {
+    transform: translate(-6px, -6px);
+    width: 42px;
+    height: 42px;
+    border-color: #f0d9a8;
+  }
+
+  .investment-card:hover::after {
+    transform: translate(6px, 6px);
+    width: 42px;
+    height: 42px;
+    border-color: #f0d9a8;
+  }
+
+  .investment-card:hover {
+    border-color: rgba(201, 169, 110, 0.6);
+  }
+
+  /* ==================== MIRROR SECTION — GLOW WORD REVEAL ==================== */
+  /* Statt simplem fade: jedes Wort taucht mit weichem Glow auf, wie Schrift,
+     die im Spiegel sichtbar wird. */
+
+  .mirror-line .word {
+    text-shadow: 0 0 0 rgba(201, 169, 110, 0);
+    filter: blur(4px);
+    transition:
+      opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+      filter 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+      text-shadow 1.2s ease-out;
+  }
+
+  .mirror-line .word.visible {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+    text-shadow:
+      0 0 18px rgba(201, 169, 110, 0.25),
+      0 0 4px rgba(244, 237, 224, 0.4);
+  }
+
+  /* Nach 1.5s den Glow wieder zurücknehmen → wie ein leiser Atemzug */
+  .mirror-line .word.visible.settled {
+    text-shadow: 0 0 0 rgba(201, 169, 110, 0);
+    transition: text-shadow 1.6s ease-out;
+  }
+
+  /* ==================== PIVOT — HEADLINE STAGING ==================== */
+
+  .pivot-headline .pivot-line-1,
+  .pivot-headline .pivot-line-2 {
+    display: block;
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .pivot-headline .pivot-line-1 { transition-delay: 0.2s; }
+  .pivot-headline .pivot-line-2 { transition-delay: 1.0s; }
+
+  .section-pivot.in-view .pivot-headline .pivot-line-1,
+  .section-pivot.in-view .pivot-headline .pivot-line-2 {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ==================== HERO HEADLINE — BLUR TO FOCUS (in keyframe) ==================== */
+  /* Blur ist Teil der line-rise Animation → endet zusammen mit der Slide-Up,
+     nicht erst danach. Lesbar nach 1.6s, nicht nach 3.4s. */
+
+  /* ==================== HERO PARTICLES (CSS-only) ==================== */
+
+  .hero-particles {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .hero-particle {
+    position: absolute;
+    bottom: -10px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(240, 217, 168, 1);
+    box-shadow:
+      0 0 8px rgba(240, 217, 168, 0.95),
+      0 0 18px rgba(201, 169, 110, 0.7),
+      0 0 32px rgba(201, 169, 110, 0.35);
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
+  @keyframes particle-drift {
+    0%   { opacity: 0; transform: translate3d(0, 0, 0) scale(0.4); }
+    10%  { opacity: 1; }
+    85%  { opacity: 1; }
+    100% { opacity: 0; transform: translate3d(var(--drift-x, 30px), -110vh, 0) scale(1.3); }
+  }
+
+  /* 12 Partikel — jeder mit eigenen Variablen, kürzere Cycles damit sichtbar */
+  .hero-particle:nth-child(1)  { left: 8%;   animation: particle-drift 14s linear  1s infinite; --drift-x:  30px; width: 4px; height: 4px; }
+  .hero-particle:nth-child(2)  { left: 14%;  animation: particle-drift 17s linear  3s infinite; --drift-x: -22px; }
+  .hero-particle:nth-child(3)  { left: 22%;  animation: particle-drift 15s linear  6s infinite; --drift-x:  40px; width: 6px; height: 6px; }
+  .hero-particle:nth-child(4)  { left: 31%;  animation: particle-drift 19s linear  0s infinite; --drift-x: -30px; width: 4px; height: 4px; }
+  .hero-particle:nth-child(5)  { left: 38%;  animation: particle-drift 14s linear  8s infinite; --drift-x:  22px; }
+  .hero-particle:nth-child(6)  { left: 47%;  animation: particle-drift 16s linear  4s infinite; --drift-x: -38px; width: 5px; height: 5px; }
+  .hero-particle:nth-child(7)  { left: 56%;  animation: particle-drift 15s linear  2s infinite; --drift-x:  28px; width: 4px; height: 4px; }
+  .hero-particle:nth-child(8)  { left: 63%;  animation: particle-drift 13s linear  7s infinite; --drift-x: -24px; }
+  .hero-particle:nth-child(9)  { left: 71%;  animation: particle-drift 18s linear  3s infinite; --drift-x:  35px; width: 6px; height: 6px; }
+  .hero-particle:nth-child(10) { left: 79%;  animation: particle-drift 16s linear 10s infinite; --drift-x: -20px; width: 4px; height: 4px; }
+  .hero-particle:nth-child(11) { left: 87%;  animation: particle-drift 14s linear  2s infinite; --drift-x:  28px; }
+  .hero-particle:nth-child(12) { left: 93%;  animation: particle-drift 17s linear  6s infinite; --drift-x: -26px; width: 5px; height: 5px; }
+
+  @media (max-width: 768px) {
+    /* Auf Mobile weniger Partikel sichtbar lassen */
+    .hero-particle:nth-child(n+8) { display: none; }
+  }
+
+  /* ==================== TOP ANCHOR ==================== */
+  #top { position: absolute; top: 0; left: 0; width: 1px; height: 1px; }
+
+  /* ==================== SKIP-INTRO ==================== */
+
+  body.skip-intro .intro-overlay {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.4s ease-out, visibility 0.4s ease-out;
+  }
+
+  body.skip-intro .hero-stage,
+  body.skip-intro .hero-meta,
+  body.skip-intro .scroll-indicator,
+  body.skip-intro .hero-headline .line-group {
+    animation-delay: 0s !important;
+    animation-duration: 0.5s !important;
+  }
+
+  /* ==================== CUSTOM CURSOR ==================== */
+
+  .cursor-dot,
+  .cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    will-change: transform;
+  }
+
+  .cursor-dot {
+    width: 8px;
+    height: 8px;
+    background: #f0d9a8;
+    box-shadow:
+      0 0 6px rgba(240, 217, 168, 0.95),
+      0 0 14px rgba(201, 169, 110, 0.85),
+      0 0 28px rgba(201, 169, 110, 0.55),
+      0 0 0 1px rgba(20, 16, 12, 0.3);
+    transition: opacity 0.3s ease, width 0.25s ease, height 0.25s ease;
+  }
+
+  .cursor-ring {
+    width: 42px;
+    height: 42px;
+    border: 1.5px solid rgba(201, 169, 110, 0.95);
+    box-shadow:
+      0 0 14px rgba(201, 169, 110, 0.45),
+      inset 0 0 6px rgba(201, 169, 110, 0.15),
+      0 0 0 1px rgba(20, 16, 12, 0.18);
+    background: rgba(201, 169, 110, 0.04);
+    transition:
+      width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+      height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.3s ease,
+      background-color 0.3s ease,
+      opacity 0.3s ease;
+  }
+
+  .cursor-ring.is-hover {
+    width: 72px;
+    height: 72px;
+    border-color: var(--color-gold);
+    background: rgba(201, 169, 110, 0.14);
+    box-shadow:
+      0 0 24px rgba(201, 169, 110, 0.7),
+      inset 0 0 12px rgba(201, 169, 110, 0.25),
+      0 0 0 1px rgba(20, 16, 12, 0.2);
+  }
+
+  .cursor-dot.is-hover {
+    width: 5px;
+    height: 5px;
+  }
+
+  .cursor-ring.is-hidden,
+  .cursor-dot.is-hidden {
+    opacity: 0;
+  }
+
+  /* Auf dunklen Sektionen invertiert lesbar bleiben */
+  .cursor-ring.on-dark {
+    border-color: #f0d9a8;
+    background: rgba(240, 217, 168, 0.08);
+    box-shadow:
+      0 0 18px rgba(240, 217, 168, 0.6),
+      inset 0 0 10px rgba(240, 217, 168, 0.2);
+  }
+  .cursor-dot.on-dark {
+    background: #fff;
+    box-shadow:
+      0 0 8px rgba(255, 255, 255, 0.95),
+      0 0 18px rgba(240, 217, 168, 0.85),
+      0 0 32px rgba(201, 169, 110, 0.6);
+  }
+
+  @media (max-width: 900px), (hover: none) {
+    .cursor-dot, .cursor-ring { display: none; }
+  }
+
+  body { cursor: none; }
+  @media (max-width: 900px), (hover: none) { body { cursor: auto; } }
+
+  /* ==================== SCROLL THREAD ==================== */
+
+  .scroll-thread {
+    position: fixed;
+    top: 0;
+    right: 24px;
+    width: 1px;
+    height: 100vh;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .scroll-thread.is-active {
+    opacity: 1;
+  }
+
+  .scroll-thread::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(201, 169, 110, 0.12) 8%,
+      rgba(201, 169, 110, 0.12) 92%,
+      transparent 100%
+    );
+  }
+
+  .scroll-thread-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    background: linear-gradient(
+      to bottom,
+      rgba(201, 169, 110, 0) 0%,
+      rgba(201, 169, 110, 0.85) 50%,
+      var(--color-gold) 100%
+    );
+    box-shadow: 0 0 12px rgba(201, 169, 110, 0.5);
+    will-change: height;
+  }
+
+  @media (max-width: 768px) {
+    .scroll-thread { display: none; }
+  }
+
+  /* ==================== TOP NAVIGATION ==================== */
+
+  .top-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    padding: 1.5rem 6vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    transition:
+      background 0.5s ease,
+      backdrop-filter 0.5s ease,
+      padding 0.4s ease,
+      border-color 0.5s ease;
+    border-bottom: 1px solid transparent;
+    opacity: 0;
+    transform: translateY(-12px);
+    pointer-events: none;
+  }
+
+  .top-nav.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    transition:
+      opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 1s cubic-bezier(0.16, 1, 0.3, 1),
+      background 0.5s ease,
+      backdrop-filter 0.5s ease,
+      padding 0.4s ease,
+      border-color 0.5s ease;
+  }
+
+  .top-nav.is-scrolled {
+    background: rgba(244, 237, 224, 0.78);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    padding: 1rem 6vw;
+    border-bottom-color: rgba(201, 169, 110, 0.18);
+  }
+
+  .nav-wordmark {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.85rem;
+    letter-spacing: 0.45em;
+    color: var(--color-text-dark);
+    text-indent: 0.45em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2.4rem;
+  }
+
+  .nav-link {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    color: var(--color-text-soft);
+    text-transform: uppercase;
+    text-decoration: none;
+    text-indent: 0.32em;
+    position: relative;
+    padding: 0.4rem 0;
+    transition: color 0.3s ease;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--color-gold);
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .nav-link:hover {
+    color: var(--color-text-dark);
+  }
+
+  .nav-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+
+  .nav-cta {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.7rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-indent: 0.32em;
+    color: var(--color-text-dark);
+    padding: 0.7rem 1.4rem;
+    border: 1px solid rgba(201, 169, 110, 0.5);
+    transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+  }
+
+  .nav-cta:hover {
+    background: var(--color-deep);
+    color: var(--color-warm-white);
+    border-color: var(--color-gold);
+  }
+
+  @media (max-width: 768px) {
+    .top-nav { padding: 1rem 1.5rem; }
+    .top-nav.is-scrolled { padding: 0.8rem 1.5rem; }
+    .nav-links { gap: 1.2rem; }
+    .nav-link:not(.nav-link--keep) { display: none; }
+    .nav-cta { padding: 0.6rem 1rem; font-size: 0.65rem; }
+  }
+
+  /* ==================== STICKY PURCHASE BAR ==================== */
+
+  .sticky-bar {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%) translateY(140%);
+    z-index: 150;
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    padding: 0.9rem 1rem 0.9rem 1.8rem;
+    background: rgba(20, 16, 12, 0.92);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid rgba(201, 169, 110, 0.35);
+    border-radius: 999px;
+    box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.5);
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+    opacity: 0;
+    pointer-events: none;
+    max-width: 92vw;
+  }
+
+  .sticky-bar.is-visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sticky-bar.is-hidden-cta {
+    transform: translateX(-50%) translateY(140%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .sticky-bar-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .sticky-bar-label {
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: rgba(224, 193, 132, 0.85);
+    text-indent: 0.42em;
+  }
+
+  .sticky-bar-info {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    color: var(--color-warm-white);
+    letter-spacing: 0.005em;
+  }
+
+  .sticky-bar-info strong {
+    font-weight: 500;
+    color: #f0d9a8;
+  }
+
+  .sticky-bar-cta {
+    display: inline-block;
+    padding: 0.85rem 1.6rem;
+    background: var(--color-warm-white);
+    color: var(--color-deep);
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    text-indent: 0.32em;
+    text-decoration: none;
+    border-radius: 999px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  .sticky-bar-cta:hover {
+    background: var(--color-gold);
+    color: var(--color-deep);
+  }
+
+  @media (max-width: 640px) {
+    .sticky-bar {
+      gap: 0.8rem;
+      padding: 0.7rem 0.7rem 0.7rem 1.2rem;
+    }
+    .sticky-bar-info { font-size: 0.85rem; }
+    .sticky-bar-label { font-size: 0.55rem; letter-spacing: 0.35em; }
+    .sticky-bar-cta { padding: 0.7rem 1rem; font-size: 0.65rem; letter-spacing: 0.25em; }
+  }
+
+  /* ==================== STATS / COUNTERS ==================== */
+
+  .section-stats {
+    padding: 12vh 0 10vh;
+    background: linear-gradient(
+      180deg,
+      var(--color-cream) 0%,
+      var(--color-warm-white) 100%
+    );
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stats-header {
+    text-align: center;
+    margin-bottom: 6vh;
+    padding: 0 6vw;
+  }
+
+  .stats-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 6vw;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2vw;
+    position: relative;
+  }
+
+  .stats-grid::before {
+    content: '';
+    position: absolute;
+    left: 6vw;
+    right: 6vw;
+    top: 50%;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(201, 169, 110, 0.18) 20%,
+      rgba(201, 169, 110, 0.18) 80%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+
+  .stat {
+    text-align: center;
+    padding: 2rem 0.5rem;
+    position: relative;
+    background: var(--color-cream);
+  }
+
+  .stat-number {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(3.2rem, 6vw, 5.5rem);
+    line-height: 1;
+    color: var(--color-text-dark);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+
+  .stat-suffix {
+    font-size: 0.55em;
+    color: var(--color-text-bronze);
+    margin-left: 0.05em;
+    font-style: italic;
+  }
+
+  .stat-label {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.72rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--color-text-soft);
+    text-indent: 0.4em;
+  }
+
+  .stat-divider {
+    position: absolute;
+    top: 25%;
+    bottom: 25%;
+    right: -1vw;
+    width: 1px;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(201, 169, 110, 0.3) 50%,
+      transparent
+    );
+  }
+
+  .stat:last-child .stat-divider { display: none; }
+
+  @media (max-width: 768px) {
+    .stats-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .stats-grid::before { display: none; }
+    .stat { padding: 1.8rem 0.5rem; border-bottom: 1px solid rgba(201, 169, 110, 0.18); }
+    .stat:nth-child(odd) { border-right: 1px solid rgba(201, 169, 110, 0.18); }
+    .stat-divider { display: none; }
+    .stat-number { font-size: clamp(2.4rem, 11vw, 3.4rem); }
+  }
+
+  /* ==================== FIVE GATES INTERACTIVE ==================== */
+
+  .gate-item {
+    cursor: pointer;
+    position: relative;
+    padding: 1.5rem 1rem 1.5rem 0;
+    transition: padding 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .gate-item::before {
+    content: '';
+    position: absolute;
+    left: -1rem;
+    right: -1rem;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(201, 169, 110, 0.04) 0%,
+      transparent 100%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .gate-item:hover::before,
+  .gate-item.is-active::before {
+    opacity: 1;
+  }
+
+  .gate-item:hover {
+    padding-left: 1rem;
+  }
+
+  .gate-item.is-active {
+    padding-left: 1rem;
+  }
+
+  .gate-item:hover .gate-number,
+  .gate-item.is-active .gate-number {
+    color: var(--color-gold);
+    transform: translateX(-4px);
+  }
+
+  .gate-number {
+    transition: color 0.4s ease, transform 0.4s ease;
+  }
+
+  /* ==================== FOOTER (MINIMAL — STIL DEINLEBENDEINPROJEKT) ==================== */
+
+  .site-footer {
+    position: relative;
+    background: var(--color-deep);
+    color: rgba(244, 237, 224, 0.55);
+    padding: 10vh 6vw 4vh;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .footer-signature {
+    display: block;
+    max-width: 360px;
+    width: 65%;
+    height: auto;
+    margin: 0 auto 3.5rem;
+    opacity: 0.95;
+  }
+
+  .footer-domain {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.95rem;
+    color: rgba(244, 237, 224, 0.55);
+    letter-spacing: 0.04em;
+    margin-bottom: 4rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: color 0.3s ease;
+  }
+
+  .footer-domain:hover {
+    color: var(--color-warm-white);
+  }
+
+  .footer-divider {
+    width: 100%;
+    max-width: 720px;
+    height: 1px;
+    margin: 0 auto 2.2rem;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(201, 169, 110, 0.25) 50%,
+      transparent
+    );
+  }
+
+  .footer-legal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.6rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.6rem;
+  }
+
+  .footer-legal a {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.78rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgba(244, 237, 224, 0.55);
+    text-decoration: none;
+    text-indent: 0.32em;
+    transition: color 0.3s ease;
+    position: relative;
+  }
+
+  .footer-legal a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 100%;
+    height: 1px;
+    background: var(--color-gold);
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .footer-legal a:hover {
+    color: var(--color-warm-white);
+  }
+
+  .footer-legal a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+
+  .footer-legal-sep {
+    color: rgba(244, 237, 224, 0.2);
+    font-size: 0.78rem;
+  }
+
+  .footer-copyright {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.78rem;
+    color: rgba(244, 237, 224, 0.4);
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 768px) {
+    .site-footer { padding: 8vh 1.5rem 3vh; }
+    .footer-signature { max-width: 280px; width: 75%; margin-bottom: 2.6rem; }
+    .footer-domain { margin-bottom: 3rem; }
+    .footer-legal { gap: 1rem; }
+    .footer-legal a { font-size: 0.7rem; letter-spacing: 0.26em; }
+  }
+
+  /* ==================== MAGNETIC + LINK SWEEP ==================== */
+
+  .magnetic { display: inline-block; will-change: transform; }
+  .magnetic-inner { display: inline-block; will-change: transform; }
+
+  /* Lenis smooth scroll fix */
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+  .lenis.lenis-stopped { overflow: hidden; }
+
+  /* ==================== REDUCED MOTION ==================== */
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      animation-delay: 0s !important;
+      transition-duration: 0.01ms !important;
+    }
+
+    .hero-image {
+      transform: none !important;
+    }
+
+    .hero-headline .line-group,
+    .hero-meta {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== AMBIENT AUDIO ==================== -->
+<audio id="ambientAudio" loop preload="auto" muted playsinline>
+  <source src="ambient-deep-dive.wav" type="audio/wav">
+</audio>
+
+<button class="audio-toggle" id="audioToggle" aria-label="Klang an/aus" title="Klang">
+  <span class="audio-bars" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+  </span>
+</button>
+
+<!-- ==================== CUSTOM CURSOR ==================== -->
+<div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
+<!-- ==================== SCROLL THREAD ==================== -->
+<div class="scroll-thread" id="scrollThread" aria-hidden="true">
+  <div class="scroll-thread-fill" id="scrollThreadFill"></div>
+</div>
+
+<!-- ==================== TOP NAVIGATION ==================== -->
+<nav class="top-nav" id="topNav" aria-label="Hauptnavigation">
+  <a href="#top" class="nav-wordmark" data-lenis-target="#top">KLARHEIT</a>
+  <div class="nav-links">
+    <a href="#luziditaet" class="nav-link" data-lenis-target="#luziditaet">Luzidität</a>
+    <a href="#tore" class="nav-link" data-lenis-target="#tore">Die Tore</a>
+    <a href="#system" class="nav-link" data-lenis-target="#system">Das System</a>
+    <a href="#app" class="nav-link" data-lenis-target="#app">App</a>
+    <a href="#faq" class="nav-link" data-lenis-target="#faq">FAQ</a>
+    <a href="https://www.deinlebendeinprojekt.de/klarheit" class="nav-cta nav-link--keep magnetic" target="_blank" rel="noopener"><span class="magnetic-inner">Platz sichern</span></a>
+  </div>
+</nav>
+
+<!-- ==================== STICKY PURCHASE BAR ==================== -->
+<aside class="sticky-bar" id="stickyBar" aria-label="Pre-Release Angebot">
+  <div class="sticky-bar-text">
+    <span class="sticky-bar-label">Pre-Release</span>
+    <span class="sticky-bar-info"><strong>7 von 10</strong> Plätzen frei · 999 €</span>
+  </div>
+  <a href="https://www.deinlebendeinprojekt.de/klarheit" class="sticky-bar-cta magnetic" target="_blank" rel="noopener"><span class="magnetic-inner">Platz sichern</span></a>
+</aside>
+
+<!-- ==================== INTRO OVERLAY ==================== -->
+<div class="intro-overlay" id="introOverlay">
+  <div class="intro-wordmark">KLARHEIT</div>
+  <div class="intro-glow"></div>
+</div>
+
+<a id="top" tabindex="-1" aria-hidden="true"></a>
+
+<!-- ==================== HERO TRANSITION SECTION ==================== -->
+<section class="hero-transition">
+  <div class="hero-stage">
+
+    <div class="hero-image-wrapper">
+      <video
+        class="hero-video"
+        id="heroVideo"
+        poster="hero-main.png"
+        autoplay
+        muted
+        playsinline
+        preload="auto"
+        aria-label="Glaskugel auf Goldwelle vor Berglandschaft"
+      >
+        <source src="Orbvideo.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <img
+      src="orb-inside.png"
+      alt=""
+      class="orb-inside"
+      aria-hidden="true"
+      decoding="async"
+      loading="eager"
+    >
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-particles" aria-hidden="true">
+      <span class="hero-particle"></span>
+      <span class="hero-particle"></span>
+      <span class="hero-particle"></span>
+      <span class="hero-particle"></span>
+      <span class="hero-particle"></span>
+      <span class="hero-particle"></span>
+      <span class="hero-particle"></span>
+      <span class="hero-particle"></span>
+      <span class="hero-particle"></span>
+      <span class="hero-particle"></span>
+      <span class="hero-particle"></span>
+      <span class="hero-particle"></span>
+    </div>
+
+    <div class="hero-content">
+      <h1 class="hero-headline">
+        <span class="line-group">
+          <span class="line">Jede Nacht träumst du,</span>
+          <span class="line">ohne es zu merken.</span>
+        </span>
+        <span class="line-group">
+          <span class="line">Vielleicht ist die Nacht</span>
+          <span class="line">nur der ehrlichste Spiegel.</span>
+        </span>
+      </h1>
+
+      <div class="hero-meta">
+        <div class="hero-coursename">KLARHEIT &nbsp;·&nbsp; Meister der Luzidität</div>
+        <div class="hero-subline">Luzides Träumen. Bewusstseinsschulung. Klarheit in jedem Augenblick.</div>
+      </div>
+    </div>
+
+    <div class="scroll-indicator">
+      <div class="scroll-line"></div>
+      <div class="scroll-label">Beginnen</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==================== MIRROR SECTION ==================== -->
+<section class="mirror-section" id="mirrorSection">
+  <video
+    class="mirror-video"
+    id="mirrorVideo"
+    poster="orb-inside.png"
+    autoplay muted loop playsinline preload="auto"
+    aria-hidden="true">
+    <source src="Orbinside.mp4" type="video/mp4">
+  </video>
+  <div class="mirror-content">
+    <span class="mirror-line line-soft-1">Und das hat Folgen.</span>
+    <span class="mirror-line line-soft-2">Träume kehren wieder, weil du nicht hinsiehst.</span>
+    <span class="mirror-line line-soft-3">Tage rauschen vorbei, weil du nicht ganz da warst.</span>
+
+    <div class="mirror-divider" aria-hidden="true"></div>
+
+    <span class="mirror-line line-strong-1">Du wirst älter.<br>Doch du wachst nicht auf.</span>
+    <span class="mirror-line line-strong-2">Das ist der Preis.</span>
+    <span class="mirror-line line-strong-3">Ein Leben, halb erlebt.</span>
+  </div>
+</section>
+
+<!-- ==================== SEKTION 3: WAS IST LUZIDES TRÄUMEN ==================== -->
+<section class="section section-definition" id="luziditaet">
+  <div class="section-inner">
+    <div class="definition-text">
+      <div class="section-eyebrow reveal">Was es wirklich ist</div>
+      <h2 class="section-headline reveal reveal-delay-1">
+        Luzides Träumen bedeutet:<br>
+        <em>Im Traum wissen, dass du träumst.</em>
+      </h2>
+      <div class="gold-line reveal reveal-delay-2"></div>
+      <div class="section-body reveal reveal-delay-2">
+        <p>Du schläfst. Du träumst. Und mitten im Traum erkennst du es. Du wirst wach. Nicht im Bett. Im Traum.</p>
+        <p>In diesem Augenblick entsteht Wahl. Du kannst bleiben. Du kannst lenken. Du kannst fragen. Du kannst lernen.</p>
+        <p>Was du im Traum übst, trägst du in den Tag. Was du im Tag übst, trägst du in den Traum. Beide Welten durchdringen sich.</p>
+      </div>
+      <div class="definition-quote reveal reveal-delay-3">
+        5800 Jahre alte Praxis. 1975 wissenschaftlich nachgewiesen. 2021 in Echtzeit kommuniziert.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SEKTION 3.5: STATS ==================== -->
+<section class="section-stats" aria-label="Was im Kurs enthalten ist">
+  <div class="stats-header">
+    <div class="section-eyebrow reveal">In Zahlen</div>
+    <h2 class="section-headline reveal reveal-delay-1">
+      Was du <em>wirklich</em> bekommst.
+    </h2>
+  </div>
+  <div class="stats-grid">
+    <div class="stat reveal">
+      <span class="stat-number" data-counter="158">0</span>
+      <div class="stat-label">Lektionen</div>
+      <div class="stat-divider"></div>
+    </div>
+    <div class="stat reveal reveal-delay-1">
+      <span class="stat-number" data-counter="50">0</span>
+      <div class="stat-label">Workbooks</div>
+      <div class="stat-divider"></div>
+    </div>
+    <div class="stat reveal reveal-delay-2">
+      <span class="stat-number" data-counter="30">0<span class="stat-suffix">h+</span></span>
+      <div class="stat-label">Videomaterial</div>
+      <div class="stat-divider"></div>
+    </div>
+    <div class="stat reveal reveal-delay-3">
+      <span class="stat-number" data-counter="6">0<span class="stat-suffix">h+</span></span>
+      <div class="stat-label">Audio-Übungen</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SEKTION 4: STORIES ==================== -->
+<section class="section section-stories">
+  <div class="stories-header">
+    <div class="section-eyebrow reveal">Geschichte</div>
+    <h2 class="section-headline reveal reveal-delay-1">
+      Sie nahmen ihre Träume ernst.<br>
+      <em>Und handelten.</em>
+    </h2>
+  </div>
+
+  <div class="stories-stage reveal reveal-delay-2">
+    <video
+      class="stories-stage-video"
+      id="storiesVideo"
+      poster="futuristic-architectural-serenity-in-gold.png"
+      autoplay muted loop playsinline preload="auto"
+      aria-hidden="true">
+      <source src="storiesbuehne.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div class="story-cards">
+    <div class="story-card reveal reveal-delay-1">
+      <div class="story-card-marker"></div>
+      <div class="story-card-name">Otto Loewi</div>
+      <div class="story-card-year">1921 · Nobelpreis</div>
+      <p class="story-card-text">
+        Träumte zwei Nächte hintereinander dasselbe Experiment. Das Wachbewusstsein hatte vergessen. Der Traum hielt fest. Er führte den Versuch aus. Das war der Beginn der Neurochemie.
+      </p>
+    </div>
+
+    <div class="story-card reveal reveal-delay-2">
+      <div class="story-card-marker"></div>
+      <div class="story-card-name">August Kekulé</div>
+      <div class="story-card-year">1865 · Benzol</div>
+      <p class="story-card-text">
+        Sah im Traum eine Schlange, die sich in den eigenen Schwanz beißt. Er wachte auf, zeichnete den Ring. Eine ganze Wissenschaft fand ihre Form.
+      </p>
+    </div>
+
+    <div class="story-card reveal reveal-delay-3">
+      <div class="story-card-marker"></div>
+      <div class="story-card-name">Larry Page</div>
+      <div class="story-card-year">1996 · Google</div>
+      <p class="story-card-text">
+        Erwachte mit einer Vision. Was wäre, wenn man das gesamte Web herunterladen und die Verbindungen zwischen allen Seiten sichtbar machen könnte. Er nahm den Traum ernst. Heute trägt seine Antwort die Welt.
+      </p>
+    </div>
+  </div>
+
+  <p class="stories-conclusion reveal reveal-delay-3">
+    Träume sind keine Spielerei. Sie haben die Welt geformt.
+  </p>
+</section>
+
+<!-- ==================== SEKTION 5: WENDEPUNKT ==================== -->
+<section class="section-pivot">
+  <video
+    class="pivot-video"
+    id="pivotVideo"
+    poster="golden-path-to-ethereal-reflection.png"
+    autoplay muted loop playsinline preload="auto"
+    aria-hidden="true">
+    <source src="Pivot.mp4" type="video/mp4">
+  </video>
+  <div class="pivot-content">
+    <div class="section-eyebrow reveal">Der Kern</div>
+    <h2 class="pivot-headline reveal reveal-delay-1">
+      <span class="pivot-line-1">Luzides Träumen ist <em>das Werkzeug.</em></span>
+      <span class="pivot-line-2"><strong>Nicht das Ziel.</strong></span>
+    </h2>
+    <div class="gold-line reveal reveal-delay-2"></div>
+    <div class="pivot-body reveal reveal-delay-2">
+      <p>Das Ziel ist Luzidität. Klarheit und Bewusstheit in jedem Moment. Wachend. Träumend. In den Übergängen dazwischen.</p>
+      <p>Wer nur Klarträume sammelt, bleibt am Eingang stehen. Wer durchgeht, lernt eine andere Art des Lebens.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SEKTION 6: FÜNF TORE ==================== -->
+<section class="section section-gates" id="tore">
+  <div class="gates-header">
+    <div class="section-eyebrow reveal">Der Weg</div>
+    <h2 class="section-headline reveal reveal-delay-1">
+      Fünf Tore.<br>
+      <em>Ein Weg.</em>
+    </h2>
+  </div>
+
+  <div class="gates-grid">
+    <div class="gates-image reveal"></div>
+
+    <div class="gate-list">
+      <div class="gate-item threshold reveal reveal-delay-1">
+        <div class="gate-number">0</div>
+        <div class="gate-content">
+          <div class="gate-title">Das Gelöbnis</div>
+          <div class="gate-description">Der Schritt vor dem Weg. Du gibst dir dein Wort. Erst dann beginnt der Kurs zu wirken.</div>
+        </div>
+      </div>
+
+      <div class="gate-item reveal reveal-delay-1">
+        <div class="gate-number">I</div>
+        <div class="gate-content">
+          <div class="gate-title">Fundament</div>
+          <div class="gate-description">Du baust den Boden, auf dem alles steht. Tagebuch, Reality Checks, erste Klarheit.</div>
+        </div>
+      </div>
+
+      <div class="gate-item reveal reveal-delay-2">
+        <div class="gate-number">II</div>
+        <div class="gate-content">
+          <div class="gate-title">Durchbruch</div>
+          <div class="gate-description">Der erste absichtliche Klartraum. Was vorher Zufall war, wird Methode.</div>
+        </div>
+      </div>
+
+      <div class="gate-item reveal reveal-delay-2">
+        <div class="gate-number">III</div>
+        <div class="gate-content">
+          <div class="gate-title">Furchtlosigkeit</div>
+          <div class="gate-description">Du bleibst, wenn andere fliehen. Albträume werden Lehrer.</div>
+        </div>
+      </div>
+
+      <div class="gate-item reveal reveal-delay-3">
+        <div class="gate-number">IV</div>
+        <div class="gate-content">
+          <div class="gate-title">Wandlung</div>
+          <div class="gate-description">Heilung, Kreativität, Energiearbeit. Der Traum wird zum Werkraum.</div>
+        </div>
+      </div>
+
+      <div class="gate-item reveal reveal-delay-3">
+        <div class="gate-number">V</div>
+        <div class="gate-content">
+          <div class="gate-title">Luzidität</div>
+          <div class="gate-description">Klarheit, die bleibt. Traum und Tag sind nicht mehr getrennt.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SEKTION 7: ÖKOSYSTEM ==================== -->
+<section class="section section-ecosystem" id="system">
+  <div class="section-inner">
+    <div class="ecosystem-grid">
+      <div class="ecosystem-image reveal">
+        <img src="elegant-tech-in-serene-luxury-setting.png" alt="Kurs, Workbook und App" loading="lazy" decoding="async">
+      </div>
+      <div class="ecosystem-text">
+        <div class="section-eyebrow reveal reveal-delay-1">Was du bekommst</div>
+        <h2 class="section-headline reveal reveal-delay-1">
+          Kein einzelner Kurs.<br>
+          <em>Ein System.</em>
+        </h2>
+
+        <div class="ecosystem-pillars">
+          <div class="pillar reveal reveal-delay-2">
+            <div class="pillar-number">I</div>
+            <div class="pillar-content">
+              <div class="pillar-title">Der Kurs</div>
+              <div class="pillar-description">158 Lektionen über fünf Tore. Über 30 Stunden Material. Klar geführt, von Anfang bis Tiefe.</div>
+            </div>
+          </div>
+
+          <div class="pillar reveal reveal-delay-2">
+            <div class="pillar-number">II</div>
+            <div class="pillar-content">
+              <div class="pillar-title">Die Workbooks</div>
+              <div class="pillar-description">50 begleitende Workbooks. Über 13 Stunden Wirken auf Papier. Was die Hand festhält, hält der Geist.</div>
+            </div>
+          </div>
+
+          <div class="pillar reveal reveal-delay-3">
+            <div class="pillar-number">III</div>
+            <div class="pillar-content">
+              <div class="pillar-title">Die Audios</div>
+              <div class="pillar-description">Über 6 Stunden geführte Übungen. TLR, Achtsamkeitspraxis, Trauminduktion. Klang, der die Klarheit ruft.</div>
+            </div>
+          </div>
+
+          <div class="pillar reveal reveal-delay-3">
+            <div class="pillar-number">IV</div>
+            <div class="pillar-content">
+              <div class="pillar-title">Die App Luzide</div>
+              <div class="pillar-description">Separat im Abo. Tracking, Reality Checks, intelligente Wecker. Der ideale Begleiter für die tägliche Praxis.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SEKTION 8: APP ==================== -->
+<section class="section-app" id="app">
+  <div class="app-content">
+    <div class="app-eyebrow reveal">Luzide</div>
+    <h2 class="app-headline reveal reveal-delay-1">
+      Dein Begleiter.<br>
+      Jede Nacht.
+    </h2>
+    <div class="app-body reveal reveal-delay-2">
+      <p>Was nützt das beste Wissen, wenn es nicht trägt durch die Nacht. Die App Luzide ist gebaut für genau diesen Übergang. Vom Wissen ins Tun.</p>
+      <p>Hier siehst du nur einen kleinen Ausschnitt. Die App bietet weit mehr.</p>
+    </div>
+
+    <div class="app-features">
+      <div class="app-feature reveal reveal-delay-2">
+        <div class="app-feature-title">Traumtagebuch</div>
+        <div class="app-feature-text">Sprache, Schrift, Stimme. Sofort, bevor der Traum verblasst.</div>
+      </div>
+      <div class="app-feature reveal reveal-delay-2">
+        <div class="app-feature-title">Traumzeichen</div>
+        <div class="app-feature-text">Die App lernt deine Muster. Was wiederkommt, wird sichtbar.</div>
+      </div>
+      <div class="app-feature reveal reveal-delay-3">
+        <div class="app-feature-title">Reality Checks</div>
+        <div class="app-feature-text">Sanfte Erinnerungen über den Tag. Bewusstheit als Gewohnheit.</div>
+      </div>
+      <div class="app-feature reveal reveal-delay-3">
+        <div class="app-feature-title">TLR Audio</div>
+        <div class="app-feature-text">Targeted Lucidity Reactivation. Klang, der die Klarheit ruft.</div>
+      </div>
+      <div class="app-feature reveal reveal-delay-4">
+        <div class="app-feature-title">WBTB Timing</div>
+        <div class="app-feature-text">Der intelligente Wecker. Im Rhythmus deiner Schlafzyklen.</div>
+      </div>
+      <div class="app-feature reveal reveal-delay-4">
+        <div class="app-feature-title">Tor-System</div>
+        <div class="app-feature-text">Praxis öffnet, wenn du bereit bist. Nicht früher.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SEKTION 9: EHRLICHKEIT ==================== -->
+<section class="section section-honesty">
+  <div class="section-inner">
+    <div class="honesty-header">
+      <div class="section-eyebrow reveal">Ehrlichkeit</div>
+      <h2 class="section-headline reveal reveal-delay-1">
+        Dieser Kurs ist <em>nicht für jeden.</em>
+      </h2>
+    </div>
+
+    <div class="honesty-grid">
+      <div class="honesty-column reveal reveal-delay-2">
+        <h3>Für dich</h3>
+        <ul>
+          <li>Du willst nicht länger durch dein eigenes Leben schlafen.</li>
+          <li>Du suchst Tiefe, nicht Tricks.</li>
+          <li>Du bist bereit für die Übung. Nicht für die Abkürzung.</li>
+          <li>Du willst Klarheit nicht nur im Traum, sondern in jedem Moment.</li>
+          <li>Du erkennst, dass das Innere die Welt formt, nicht andersherum.</li>
+        </ul>
+      </div>
+
+      <div class="honesty-divider reveal reveal-delay-2"></div>
+
+      <div class="honesty-column reveal reveal-delay-3">
+        <h3>Nicht für dich</h3>
+        <ul>
+          <li>Du suchst Klartraum auf Knopfdruck. Hier bekommst du keinen.</li>
+          <li>Du bist in akuter psychischer Krise. Dann zuerst professionelle Hilfe. Der Kurs kann später begleiten.</li>
+          <li>Du willst Effekte für Social Media. Das ist nicht der Ort.</li>
+          <li>Du erwartest, dass jemand für dich geht. Niemand tut das.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SEKTION 10: JOOBIN ==================== -->
+<section class="section section-joobin">
+  <div class="section-inner">
+    <div class="joobin-portrait reveal">
+      <img src="Joobin.png" alt="Joobin Khavand" loading="lazy" decoding="async">
+    </div>
+    <p class="joobin-quote reveal reveal-delay-1">
+      Man kann die Tür für dich öffnen.<br>
+      <em>Durchgehen musst du selbst.</em>
+    </p>
+
+    <div class="joobin-text reveal reveal-delay-1">
+      <p>Mein Name ist Joobin. Ich begleite Menschen seit 2018 auf dem Weg in ihre eigene Klarheit. Ich bin kein Guru. Ich bin Wegbegleiter.</p>
+      <p>Ich habe selbst lange im Halbschlaf gelebt. Ich habe das Wachwerden gelernt. Im Traum. Im Tag. In den Übergängen.</p>
+      <p>Was ich kann, gebe ich dir mit. Was du daraus machst, ist dein Weg.</p>
+    </div>
+
+    <div class="joobin-signature reveal reveal-delay-2">— Joobin</div>
+  </div>
+</section>
+
+<!-- ==================== SEKTION 11: INVESTMENT ==================== -->
+<section class="section section-investment" id="investment">
+  <div class="section-inner">
+    <div class="investment-header">
+      <div class="section-eyebrow reveal">Eine Entscheidung</div>
+      <h2 class="section-headline reveal reveal-delay-1">
+        <em>Der Eintritt.</em>
+      </h2>
+    </div>
+
+    <div class="investment-card reveal reveal-delay-2">
+      <div class="investment-tier">Pre-Release</div>
+      <div class="investment-name">KLARHEIT</div>
+      <div class="investment-subtitle">Meister der Luzidität</div>
+
+      <div class="investment-price">999 €</div>
+      <div class="investment-price-note">einmalig &nbsp;·&nbsp; sofort starten</div>
+
+      <ul class="investment-includes">
+        <li>158 Lektionen über fünf Tore</li>
+        <li>50 begleitende Workbooks</li>
+        <li>Über 30 Stunden Videomaterial</li>
+        <li>Über 6 Stunden Audio-Übungen</li>
+        <li>App Luzide im KLARHEIT-Modus</li>
+        <li>Regelmäßige Updates</li>
+      </ul>
+
+      <a href="https://www.deinlebendeinprojekt.de/klarheit" class="investment-cta" target="_blank" rel="noopener"><span>Platz sichern</span></a>
+    </div>
+
+    <p class="investment-tiers-info reveal reveal-delay-3">
+      Pre-Release: 10 Plätze · 999 €<br>
+      Early Bird: 1599 €<br>
+      Standard: 2199 €<br>
+      Die App Luzide ist separat erhältlich.
+    </p>
+  </div>
+</section>
+
+<!-- ==================== SEKTION 12: FAQ ==================== -->
+<section class="section section-faq" id="faq">
+  <div class="section-inner">
+    <div class="faq-header">
+      <div class="section-eyebrow reveal">Fragen</div>
+      <h2 class="section-headline reveal reveal-delay-1">
+        Deine Fragen.<br>
+        <em>Ehrliche Antworten.</em>
+      </h2>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          <span>Ich habe noch nie luzid geträumt. Ist das ein Problem?</span>
+          <span class="faq-toggle"></span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>Nein. Der Kurs beginnt am Anfang. Tor I baut das Fundament. Wer schon Erfahrung hat, geht schneller. Wer keine hat, bekommt sie hier.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          <span>Wie viel Zeit brauche ich pro Tag?</span>
+          <span class="faq-toggle"></span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>Der Kurs ist im Lebensrhythmus baubar. 15 bis 30 Minuten am Tag reichen für die Praxis. Die Lektionen schaust du in deinem Tempo.</p>
+            <p>Je mehr du investierst, desto mehr bekommst du heraus. Der Kurs wird Teil deines Lebens. Du lebst Luzidität im Wachen und im Traum.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          <span>Ist das esoterisch?</span>
+          <span class="faq-toggle"></span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>Nein. Der Kurs steht zwischen Wissenschaft und Erfahrungswissen. Beide werden ernst genommen. Was die Forschung zeigt, wird gezeigt. Was die Praxis seit Jahrtausenden weiß, wird respektiert. Keine Engelszahlen, keine New-Age-Versprechen.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          <span>Brauche ich die App für den Kurs?</span>
+          <span class="faq-toggle"></span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>Nein. Der Kurs läuft auch ohne App. Doch die App macht die Praxis leichter. Sie ist separat erhältlich.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          <span>Was, wenn ich in einer schwierigen Phase bin?</span>
+          <span class="faq-toggle"></span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>Wenn du in einer akuten psychischen Krise bist, suche bitte zuerst professionelle Hilfe. Therapeuten, Ärztinnen, Krisendienste. Der Kurs kann später begleiten, doch er ersetzt keine Therapie.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          <span>Steht der Kurs im Einklang mit meinem Glauben?</span>
+          <span class="faq-toggle"></span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>Luzides Träumen ist eine menschliche Fähigkeit. Sie wird in vielen Traditionen praktiziert, von Tibet bis zum Schamanismus. Der Kurs erzwingt keine Weltsicht. Er gibt Werkzeuge.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          <span>Kann ich den Kurs später kaufen?</span>
+          <span class="faq-toggle"></span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>Ja. Der Preis steigt nach dem Pre-Release auf 1599 €, später auf 2199 €. Die Plätze im Pre-Release sind auf 10 begrenzt.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SEKTION 13: FINAL CTA ==================== -->
+<section class="section-final" id="beginnen">
+  <div class="final-content">
+    <h2 class="final-headline reveal">
+      Wach werden<br>
+      <em>beginnt nicht am Morgen.</em>
+    </h2>
+    <div class="final-body reveal reveal-delay-1">
+      <p>Es beginnt in dem Augenblick, in dem du dich entscheidest hinzusehen. Der Weg liegt offen. Du gehst ihn.</p>
+    </div>
+    <a href="https://www.deinlebendeinprojekt.de/klarheit" class="final-cta reveal reveal-delay-2 magnetic" target="_blank" rel="noopener"><span class="magnetic-inner">Den Weg beginnen</span></a>
+  </div>
+</section>
+
+<!-- ==================== FOOTER (MINIMAL) ==================== -->
+<footer class="site-footer">
+  <img
+    src="Joobin-Khavand-Signature-Gold-Wegbegleiter.png"
+    alt="Joobin Khavand · Wegbegleiter"
+    class="footer-signature"
+    loading="lazy"
+    decoding="async"
+  >
+
+  <a href="https://www.deinlebendeinprojekt.de/" class="footer-domain" target="_blank" rel="noopener">
+    www.deinlebendeinprojekt.de
+  </a>
+
+  <div class="footer-divider" aria-hidden="true"></div>
+
+  <div class="footer-legal">
+    <a href="https://www.deinlebendeinprojekt.de/agb" target="_blank" rel="noopener">AGB</a>
+    <span class="footer-legal-sep">|</span>
+    <a href="https://www.deinlebendeinprojekt.de/impressum-datenschutz" target="_blank" rel="noopener">Impressum &amp; Datenschutz</a>
+  </div>
+
+  <div class="footer-copyright">© 2026 Joobin Khavand. Alle Rechte vorbehalten.</div>
+</footer>
+
+<script>
+  // ==================== INTRO OVERLAY ====================
+
+  // Beim Page-Load Scroll-Position auf 0 erzwingen
+  // Verhindert dass F5 in einer unteren Sektion die Page dort öffnet
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+  window.scrollTo(0, 0);
+
+  setTimeout(() => {
+    document.getElementById('introOverlay').classList.add('hidden');
+  }, 3000);
+
+  let introSkipped = false;
+  function skipIntro() {
+    if (introSkipped) return;
+    introSkipped = true;
+    document.body.classList.add('skip-intro');
+  }
+
+  setTimeout(() => {
+    window.addEventListener('scroll', skipIntro, { once: true, passive: true });
+    window.addEventListener('wheel', skipIntro, { once: true, passive: true });
+    window.addEventListener('touchstart', skipIntro, { once: true, passive: true });
+    document.addEventListener('keydown', skipIntro, { once: true });
+    document.addEventListener('click', skipIntro, { once: true });
+  }, 200);
+
+  // ==================== HERO TRANSITION ====================
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduceMotion) {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.hero-transition',
+        start: 'top top',
+        end: '+=100%',
+        pin: true,
+        scrub: 0.5,
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          // Hysterese-Schwellen verhindern Flackern bei progress-Schwankungen
+          // Hochgehen: Schwelle bei 0.7
+          // Runtergehen: Schwelle bei 0.5 (deutlich unter 0.7)
+          // Zwischen 0.5 und 0.7 bleibt der State unverändert
+          const mirrorEl = document.getElementById('mirrorSection');
+          if (self.progress >= 0.7) {
+            mirrorEl.classList.add('is-visible');
+            mirrorEl.classList.add('is-fixed');
+          } else if (self.progress < 0.5) {
+            mirrorEl.classList.remove('is-visible');
+            mirrorEl.classList.remove('is-fixed');
+          }
+        },
+        onLeave: () => {
+          // Pin ist nach unten durch — mirror-section wechselt zum normalen Document-Flow
+          const mirrorEl = document.getElementById('mirrorSection');
+          mirrorEl.classList.remove('is-fixed');
+        },
+        onEnterBack: () => {
+          // User scrollt von unten zurück in den Pin — mirror-section wieder fixed
+          const mirrorEl = document.getElementById('mirrorSection');
+          mirrorEl.classList.add('is-fixed');
+        },
+        onLeaveBack: () => {
+          // User scrollt ganz zurück über den Hero-Anfang — alles zurücksetzen
+          const mirrorEl = document.getElementById('mirrorSection');
+          mirrorEl.classList.remove('is-visible');
+          mirrorEl.classList.remove('is-fixed');
+        }
+      }
+    });
+
+    // 1. Hero-Content + Scroll-Indicator ausblenden
+    tl.to(['.hero-content', '.scroll-indicator'], {
+      opacity: 0,
+      y: -30,
+      duration: 0.15,
+      ease: 'power1.out'
+    }, 0);
+
+    // 2. Hero-Image-Wrapper zoomt Richtung Kugel
+    tl.to('.hero-image-wrapper', {
+      scale: 2.2,
+      duration: 0.5,
+      ease: 'power1.in'
+    }, 0.05);
+
+    // 3. Orb-Inside einblenden
+    tl.to('.orb-inside', {
+      opacity: 1,
+      duration: 0.05
+    }, 0.4);
+
+    // 4. Maske wachsen lassen — abgeschlossen bei progress 0.85
+    tl.to('.hero-transition', {
+      '--mask-radius': '150%',
+      duration: 0.45,
+      ease: 'power2.inOut'
+    }, 0.4);
+
+    // 5. Hero-Image-Wrapper ausblenden
+    tl.to('.hero-image-wrapper', {
+      opacity: 0,
+      duration: 0.15,
+      ease: 'power1.out'
+    }, 0.7);
+
+    // Refresh ScrollTrigger nach Layoutwechseln (z.B. resize)
+    window.addEventListener('resize', () => {
+      ScrollTrigger.refresh();
+    });
+
+  } else {
+    // Reduced-motion Fallback: einfacher Fade von Hero zu Orb-Inside
+    document.querySelector('.orb-inside').style.opacity = '1';
+    document.querySelector('.orb-inside').style.clipPath = 'none';
+    // Mirror-Section direkt sichtbar machen
+    document.getElementById('mirrorSection').classList.add('is-visible');
+  }
+
+  // ==================== MIRROR SECTION ====================
+  // Reveal läuft über CSS-Transitions, getriggert durch die is-visible Klasse
+  // (gesetzt vom Hero-ScrollTrigger onUpdate-Callback wenn progress > 0.85).
+  // Kein zusätzliches JS hier nötig.
+
+  // ==================== UNIVERSAL REVEAL-ON-SCROLL ====================
+  // Alle Elemente mit Klasse .reveal werden eingeblendet wenn sie in den Viewport kommen
+  // Nutzt IntersectionObserver, performant, ohne ScrollTrigger-Overhead
+
+  if (!reduceMotion) {
+    const revealElements = document.querySelectorAll('.reveal');
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+  } else {
+    // Reduced motion: alles direkt sichtbar
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
+  }
+
+  // ==================== LENIS SMOOTH SCROLL ====================
+
+  let lenis = null;
+  if (!reduceMotion && typeof Lenis !== 'undefined') {
+    lenis = new Lenis({
+      duration: 1.15,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.4,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    // Sync mit ScrollTrigger
+    if (typeof ScrollTrigger !== 'undefined') {
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+    }
+  }
+
+  // Smooth Anker-Scrollen mit Lenis
+  document.querySelectorAll('[data-lenis-target]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const target = link.getAttribute('data-lenis-target');
+      const el = document.querySelector(target);
+      if (!el) return;
+      e.preventDefault();
+      if (lenis) {
+        lenis.scrollTo(el, { offset: -40, duration: 1.4 });
+      } else {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // ==================== CUSTOM CURSOR ====================
+
+  const cursorDot = document.getElementById('cursorDot');
+  const cursorRing = document.getElementById('cursorRing');
+  const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
+
+  if (cursorDot && cursorRing && !isCoarsePointer) {
+    let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+    let ringX = mouseX, ringY = mouseY;
+    let dotX = mouseX, dotY = mouseY;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    function animateCursor() {
+      // Ring folgt mit lerp (Trägheit)
+      ringX += (mouseX - ringX) * 0.18;
+      ringY += (mouseY - ringY) * 0.18;
+      // Dot folgt direkt
+      dotX += (mouseX - dotX) * 0.55;
+      dotY += (mouseY - dotY) * 0.55;
+      cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+      cursorDot.style.transform = `translate(${dotX}px, ${dotY}px) translate(-50%, -50%)`;
+      requestAnimationFrame(animateCursor);
+    }
+    requestAnimationFrame(animateCursor);
+
+    // Hover-States
+    const hoverSelectors = 'a, button, .faq-question, .gate-item, .story-card, .pillar, .app-feature, .investment-cta, .final-cta, .nav-cta, .sticky-bar-cta';
+    document.addEventListener('mouseover', (e) => {
+      if (e.target.closest(hoverSelectors)) {
+        cursorRing.classList.add('is-hover');
+        cursorDot.classList.add('is-hover');
+      }
+    });
+    document.addEventListener('mouseout', (e) => {
+      if (e.target.closest(hoverSelectors)) {
+        cursorRing.classList.remove('is-hover');
+        cursorDot.classList.remove('is-hover');
+      }
+    });
+
+    // Hide bei Verlassen des Fensters
+    document.addEventListener('mouseleave', () => {
+      cursorDot.classList.add('is-hidden');
+      cursorRing.classList.add('is-hidden');
+    });
+    document.addEventListener('mouseenter', () => {
+      cursorDot.classList.remove('is-hidden');
+      cursorRing.classList.remove('is-hidden');
+    });
+
+    // On-dark detection: invertiert die Farbe automatisch über dunklen Sektionen
+    const darkSelectors = '.section-app, .site-footer, .intro-overlay, .sticky-bar';
+    function checkDarkUnderCursor() {
+      const el = document.elementFromPoint(mouseX, mouseY);
+      if (!el) return;
+      const onDark = el.closest(darkSelectors) !== null;
+      cursorRing.classList.toggle('on-dark', onDark);
+      cursorDot.classList.toggle('on-dark', onDark);
+    }
+    document.addEventListener('mousemove', () => {
+      // throttled via requestAnimationFrame
+      if (checkDarkUnderCursor._scheduled) return;
+      checkDarkUnderCursor._scheduled = true;
+      requestAnimationFrame(() => {
+        checkDarkUnderCursor._scheduled = false;
+        checkDarkUnderCursor();
+      });
+    });
+  }
+
+  // ==================== SCROLL THREAD ====================
+
+  const scrollThread = document.getElementById('scrollThread');
+  const scrollThreadFill = document.getElementById('scrollThreadFill');
+
+  function updateScrollThread() {
+    const scrollY = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
+    if (scrollThreadFill) {
+      scrollThreadFill.style.height = progress + '%';
+    }
+    // Aktiviere Thread erst nach dem Hero
+    if (scrollY > window.innerHeight * 0.5) {
+      scrollThread?.classList.add('is-active');
+    } else {
+      scrollThread?.classList.remove('is-active');
+    }
+  }
+  window.addEventListener('scroll', updateScrollThread, { passive: true });
+  updateScrollThread();
+
+  // ==================== TOP NAVIGATION ====================
+
+  const topNav = document.getElementById('topNav');
+  function updateNav() {
+    const scrollY = window.scrollY;
+    if (scrollY > window.innerHeight * 0.6) {
+      topNav?.classList.add('is-visible');
+    } else {
+      topNav?.classList.remove('is-visible');
+    }
+    if (scrollY > 80) {
+      topNav?.classList.add('is-scrolled');
+    } else {
+      topNav?.classList.remove('is-scrolled');
+    }
+  }
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav();
+
+  // ==================== STICKY PURCHASE BAR ====================
+
+  const stickyBar = document.getElementById('stickyBar');
+  const investmentSection = document.getElementById('investment');
+  const finalSection = document.querySelector('.section-final');
+
+  function updateStickyBar() {
+    if (!stickyBar) return;
+    const scrollY = window.scrollY;
+    const showAfter = window.innerHeight * 1.5; // erst nach Hero + Mirror
+    const investmentTop = investmentSection?.offsetTop ?? Infinity;
+    const finalTop = finalSection?.offsetTop ?? Infinity;
+    const footerTop = document.querySelector('.site-footer')?.offsetTop ?? Infinity;
+
+    // Verstecken, wenn User die Investment-, Final- oder Footer-Zone sieht
+    const inInvestmentZone = scrollY + window.innerHeight * 0.7 > investmentTop && scrollY < finalTop;
+    const inFinalZone = scrollY + window.innerHeight * 0.5 > finalTop;
+    const inFooterZone = scrollY + window.innerHeight > footerTop + 200;
+    const hideZone = inInvestmentZone || inFinalZone || inFooterZone;
+
+    if (scrollY > showAfter && !hideZone) {
+      stickyBar.classList.add('is-visible');
+      stickyBar.classList.remove('is-hidden-cta');
+    } else {
+      stickyBar.classList.remove('is-visible');
+      stickyBar.classList.add('is-hidden-cta');
+    }
+  }
+  window.addEventListener('scroll', updateStickyBar, { passive: true });
+  window.addEventListener('resize', updateStickyBar);
+  updateStickyBar();
+
+  // ==================== ANIMATED COUNTERS ====================
+
+  const counters = document.querySelectorAll('[data-counter]');
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.counter, 10);
+        const suffix = el.querySelector('.stat-suffix');
+        const suffixHTML = suffix ? suffix.outerHTML : '';
+        const duration = 1800;
+        const startTime = performance.now();
+
+        function tick(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          // easeOutCubic
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const value = Math.floor(eased * target);
+          el.innerHTML = value + suffixHTML;
+          if (progress < 1) requestAnimationFrame(tick);
+          else el.innerHTML = target + suffixHTML;
+        }
+        requestAnimationFrame(tick);
+        counterObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.4 });
+
+  counters.forEach(c => counterObserver.observe(c));
+
+  // ==================== MAGNETIC BUTTONS ====================
+
+  if (!isCoarsePointer && !reduceMotion) {
+    document.querySelectorAll('.magnetic').forEach(el => {
+      const inner = el.querySelector('.magnetic-inner') || el;
+      const strength = 0.35;
+      el.addEventListener('mousemove', (e) => {
+        const rect = el.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        el.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
+        inner.style.transform = `translate(${x * strength * 0.5}px, ${y * strength * 0.5}px)`;
+      });
+      el.addEventListener('mouseleave', () => {
+        el.style.transform = '';
+        inner.style.transform = '';
+        el.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+        inner.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+        setTimeout(() => {
+          el.style.transition = '';
+          inner.style.transition = '';
+        }, 500);
+      });
+    });
+  }
+
+  // ==================== FIVE GATES INTERACTIVE ====================
+
+  const gateItems = document.querySelectorAll('.gate-item');
+  gateItems.forEach(item => {
+    item.addEventListener('click', () => {
+      gateItems.forEach(other => other.classList.remove('is-active'));
+      item.classList.add('is-active');
+    });
+  });
+
+  // ==================== PARALLAX ====================
+  // Background-Bild-Sektionen driften langsamer als der Inhalt darüber.
+  // Nutzt eine CSS-Variable, die per RAF gesetzt wird → keine Layout-Reflows.
+
+  if (!reduceMotion) {
+    // Nur Sektionen mit dominantem Bildmotiv → vermeidet Layer-Thrashing
+    const parallaxTargets = document.querySelectorAll(
+      '.section-definition, .section-investment'
+    );
+    parallaxTargets.forEach(el => el.classList.add('parallax-bg'));
+
+    let parallaxRaf = null;
+    function updateParallax() {
+      parallaxRaf = null;
+      const vh = window.innerHeight;
+      parallaxTargets.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        const top = rect.top;
+        if (top > vh || top + rect.height < 0) return;
+        const center = top + rect.height / 2;
+        // Sehr sanfter multiplier — kein Ruckeln mehr
+        const offset = (center - vh / 2) * -0.022;
+        el.style.setProperty('--parallax-y', offset.toFixed(1) + 'px');
+      });
+    }
+    function scheduleParallax() {
+      if (parallaxRaf) return;
+      parallaxRaf = requestAnimationFrame(updateParallax);
+    }
+    window.addEventListener('scroll', scheduleParallax, { passive: true });
+    window.addEventListener('resize', scheduleParallax);
+    updateParallax();
+  }
+
+  // ==================== MIRROR — GLOW-WORD-REVEAL ====================
+  // Wörter erscheinen mit weichem Glow, Glow ebbt nach 1.6s wieder ab
+  // (settled-Klasse). Trigger an die bestehende is-visible-Logik koppeln.
+
+  function wrapMirrorWords() {
+    document.querySelectorAll('.mirror-line').forEach(line => {
+      if (line.querySelector('.word')) return;
+      // Iteriere Child-Nodes — Text wird gewrapped, BR bleibt erhalten
+      const originalChildren = Array.from(line.childNodes);
+      line.textContent = '';
+      let wordIndex = 0;
+      originalChildren.forEach(node => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const words = node.textContent.split(/\s+/).filter(w => w.length > 0);
+          words.forEach((w, i) => {
+            const span = document.createElement('span');
+            span.className = 'word';
+            span.textContent = w;
+            span.style.transitionDelay = (wordIndex * 0.08) + 's';
+            line.appendChild(span);
+            wordIndex++;
+            if (i < words.length - 1) {
+              line.appendChild(document.createTextNode(' '));
+            }
+          });
+        } else if (node.nodeName === 'BR') {
+          line.appendChild(document.createElement('br'));
+        }
+      });
+    });
+  }
+  wrapMirrorWords();
+
+  // Beobachte mirror-section auf is-visible
+  const mirrorSection = document.getElementById('mirrorSection');
+  if (mirrorSection) {
+    const mirrorObs = new MutationObserver(() => {
+      if (mirrorSection.classList.contains('is-visible')) {
+        const words = mirrorSection.querySelectorAll('.word');
+        words.forEach((word, i) => {
+          setTimeout(() => word.classList.add('visible'), i * 80);
+          // Glow nach 1.6s zurücknehmen
+          setTimeout(() => word.classList.add('settled'), i * 80 + 1600);
+        });
+      } else {
+        // Beim Hochscrollen wieder zurücksetzen, damit das Reveal beim Re-Eintreten neu startet
+        const words = mirrorSection.querySelectorAll('.word');
+        words.forEach(word => {
+          word.classList.remove('visible');
+          word.classList.remove('settled');
+        });
+      }
+    });
+    mirrorObs.observe(mirrorSection, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  // ==================== PIVOT — IN-VIEW TRIGGER ====================
+  const pivotSection = document.querySelector('.section-pivot');
+  if (pivotSection) {
+    const pivotObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          pivotSection.classList.add('in-view');
+        }
+      });
+    }, { threshold: 0.3 });
+    pivotObs.observe(pivotSection);
+  }
+
+  // Hero-Headline Blur ist jetzt direkt in der line-rise keyframe-Animation drin —
+  // synchron mit der Slide-Up, kein separater JS-Trigger mehr nötig.
+
+  // ==================== HERO VIDEO — am letzten Frame einfrieren ====================
+
+  const heroVideo = document.getElementById('heroVideo');
+  if (heroVideo) {
+    heroVideo.addEventListener('ended', () => {
+      try {
+        if (heroVideo.duration && isFinite(heroVideo.duration)) {
+          heroVideo.currentTime = Math.max(0, heroVideo.duration - 0.05);
+        }
+      } catch (e) {}
+      heroVideo.pause();
+    });
+  }
+
+  // ==================== SECTION VIDEOS — Visibility-pause für Performance ====================
+  // Ping-Pong wird im Video selbst codiert (Premiere: vorwärts + reverse aneinander).
+  // Hier nur: Performance-pause wenn Sektion nicht sichtbar.
+
+  function setupSectionVideo(id) {
+    const video = document.getElementById(id);
+    if (!video) return;
+    const visObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      });
+    }, { threshold: 0 });
+    visObs.observe(video);
+  }
+
+  setupSectionVideo('mirrorVideo');
+  setupSectionVideo('storiesVideo');
+  setupSectionVideo('pivotVideo');
+
+  // ==================== AMBIENT AUDIO ====================
+  // Strategie: Audio startet stumm + autoplay (vom Browser erlaubt).
+  //   1. Beim ersten User-Input (Skip-Intro) entmuten + Volume von 0 → Ziel faden.
+  //   2. Beim Scroll aus dem Hero-Bereich Volume linear ausfaden.
+  //   3. Wenn unter 0.01 → Audio pausieren. Beim Hochscrollen wieder starten + faden.
+  //   4. Toggle oben rechts: User kann Klang manuell aus-/einschalten. Wahl wird gemerkt.
+
+  const audio = document.getElementById('ambientAudio');
+  const audioToggle = document.getElementById('audioToggle');
+  const TARGET_VOLUME = 0.42;
+  const STORAGE_KEY = 'klarheit-audio-pref';
+
+  let audioUserPref = localStorage.getItem(STORAGE_KEY); // 'on' | 'off' | null
+  let audioFadingOut = false;
+  let audioActivated = false;
+
+  function showAudioToggle() {
+    audioToggle?.classList.add('is-visible');
+  }
+
+  function setToggleState(playing) {
+    if (!audioToggle) return;
+    audioToggle.classList.toggle('is-playing', playing);
+    audioToggle.setAttribute('aria-label', playing ? 'Klang aus' : 'Klang an');
+  }
+
+  function activateAudioOnce() {
+    if (audioActivated || !audio) return;
+    audioActivated = true;
+
+    // User hat Klang explizit deaktiviert → nicht starten
+    if (audioUserPref === 'off') {
+      setToggleState(false);
+      showAudioToggle();
+      return;
+    }
+
+    audio.muted = false;
+    audio.volume = 0;
+    const playPromise = audio.play();
+    if (playPromise && playPromise.catch) {
+      playPromise.catch(() => {
+        // Browser blockt — nichts tun, Toggle bleibt verfügbar
+      });
+    }
+    fadeAudioTo(TARGET_VOLUME, 1500);
+    setToggleState(true);
+    showAudioToggle();
+  }
+
+  // Initial: Versuche stumm + autoplay (klappt fast überall, weil muted)
+  if (audio) {
+    audio.muted = true;
+    audio.volume = 0;
+    const initialPlay = audio.play();
+    if (initialPlay && initialPlay.catch) {
+      initialPlay.catch(() => {});
+    }
+
+    // Toggle nach kurzer Verzögerung sichtbar — gibt dem Hero Raum
+    setTimeout(showAudioToggle, 4000);
+  }
+
+  // Aktivierung über jeden ersten User-Input
+  ['scroll', 'wheel', 'touchstart', 'keydown', 'click', 'pointerdown'].forEach(evt => {
+    window.addEventListener(evt, activateAudioOnce, { once: true, passive: true });
+  });
+
+  // Manueller Toggle
+  audioToggle?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (!audio) return;
+    const isPlaying = !audio.paused && audio.volume > 0.05;
+    if (isPlaying) {
+      fadeAudioTo(0, 600, () => audio.pause());
+      audioUserPref = 'off';
+      localStorage.setItem(STORAGE_KEY, 'off');
+      setToggleState(false);
+    } else {
+      audio.muted = false;
+      audio.play().catch(() => {});
+      fadeAudioTo(TARGET_VOLUME, 800);
+      audioUserPref = 'on';
+      localStorage.setItem(STORAGE_KEY, 'on');
+      setToggleState(true);
+    }
+  });
+
+  // Volume-Fade-Helper
+  let fadeRaf = null;
+  function fadeAudioTo(target, duration, onDone) {
+    if (!audio) return;
+    cancelAnimationFrame(fadeRaf);
+    const startVol = audio.volume;
+    const startTime = performance.now();
+    function step(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      audio.volume = startVol + (target - startVol) * progress;
+      if (progress < 1) {
+        fadeRaf = requestAnimationFrame(step);
+      } else if (onDone) {
+        onDone();
+      }
+    }
+    fadeRaf = requestAnimationFrame(step);
+  }
+
+  // Scroll-gekoppeltes Fade
+  // Voll im Hero (0–60vh): Volume = TARGET
+  // Übergang (60–110vh): linear nach 0
+  // Darunter: gepauset
+  function updateAudioByScroll() {
+    if (!audio || audio.muted || audioUserPref === 'off') return;
+    const scrollY = window.scrollY;
+    const vh = window.innerHeight;
+    const fadeStart = vh * 0.6;
+    const fadeEnd = vh * 1.1;
+
+    let vol = TARGET_VOLUME;
+    if (scrollY <= fadeStart) {
+      vol = TARGET_VOLUME;
+    } else if (scrollY >= fadeEnd) {
+      vol = 0;
+    } else {
+      const t = (scrollY - fadeStart) / (fadeEnd - fadeStart);
+      vol = TARGET_VOLUME * (1 - t);
+    }
+
+    audio.volume = vol;
+
+    if (vol < 0.01 && !audio.paused) {
+      audio.pause();
+      audioFadingOut = true;
+    } else if (vol >= 0.01 && audio.paused && audioActivated) {
+      audio.play().catch(() => {});
+      audioFadingOut = false;
+    }
+  }
+  window.addEventListener('scroll', updateAudioByScroll, { passive: true });
+
+  // ==================== FAQ ACCORDION ====================
+
+  document.querySelectorAll('.faq-question').forEach(button => {
+    button.addEventListener('click', () => {
+      const item = button.closest('.faq-item');
+      const answer = item.querySelector('.faq-answer');
+      const isOpen = item.classList.contains('is-open');
+
+      // Andere geöffnete schließen (one-at-a-time pattern)
+      document.querySelectorAll('.faq-item.is-open').forEach(otherItem => {
+        if (otherItem !== item) {
+          otherItem.classList.remove('is-open');
+          otherItem.querySelector('.faq-answer').style.maxHeight = null;
+        }
+      });
+
+      // Aktuelles toggle
+      if (isOpen) {
+        item.classList.remove('is-open');
+        answer.style.maxHeight = null;
+      } else {
+        item.classList.add('is-open');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+      }
+    });
+  });
+
+</script>
+
+</body>
+</html>
