@@ -1817,10 +1817,28 @@
   /* ==================== MOBILE ANPASSUNGEN für neue Sektionen ==================== */
 
   @media (max-width: 768px) {
-    .section-definition .section-grid,
-    .ecosystem-grid {
+    .section-definition .section-grid {
       grid-template-columns: 1fr;
       gap: 3rem;
+    }
+
+    /* Was du bekommst — Mobile: Headline zuerst, dann Bild, dann Pillars */
+    .ecosystem-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    .ecosystem-text {
+      display: contents; /* Kinder werden direkte Grid-Items */
+    }
+    .ecosystem-text .section-eyebrow,
+    .ecosystem-text .section-headline {
+      order: 1;
+    }
+    .ecosystem-image {
+      order: 2;
+    }
+    .ecosystem-pillars {
+      order: 3;
     }
 
     .definition-image,
@@ -1830,7 +1848,9 @@
 
     .stories-stage,
     .gates-stage {
-      aspect-ratio: 4/5;
+      aspect-ratio: 16/10;
+      margin-left: 1rem;
+      margin-right: 1rem;
     }
 
     .story-panels {
@@ -1838,9 +1858,45 @@
       grid-template-rows: 1fr 1fr 1fr;
     }
 
+    .story-cards {
+      grid-template-columns: 1fr;
+      gap: 4rem;
+      padding: 0 1.5rem;
+    }
+
+    .story-card-text {
+      max-width: 100%;
+    }
+
+    .gates-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      padding: 0 1.5rem;
+    }
+
+    .gates-image {
+      aspect-ratio: 16/10;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+
+    .gate-list {
+      max-width: 28em;
+      margin: 0 auto;
+    }
+
     .gate-item {
-      grid-template-columns: 50px 1fr;
-      gap: 1.2rem;
+      grid-template-columns: 40px 1fr;
+      gap: 1rem;
+      padding: 1.2rem 0;
+    }
+
+    .gate-number {
+      font-size: 1.2rem;
+    }
+
+    .gate-title {
+      font-size: 1.1rem;
     }
 
     .honesty-grid {
@@ -1860,8 +1916,46 @@
     }
 
     .app-features {
-      grid-template-columns: 1fr;
-      gap: 1.4rem;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.7rem;
+    }
+
+    .app-feature {
+      padding: 1rem 0.9rem;
+      background: rgba(20, 16, 12, 0.45);
+      backdrop-filter: blur(16px) saturate(140%);
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+      border: 1px solid rgba(201, 169, 110, 0.3);
+    }
+
+    .app-feature-title { font-size: 0.95rem; }
+    .app-feature-text { font-size: 0.78rem; line-height: 1.5; }
+
+    /* Section-App: zeige rechte Seite vom Bild auf Mobile, Text als Glas-Card drüber */
+    .section-app {
+      background-position: 75% center; /* rechte Bildhälfte */
+      min-height: auto;
+    }
+
+    .section-app::before {
+      background: linear-gradient(
+        180deg,
+        rgba(20, 16, 12, 0.55) 0%,
+        rgba(20, 16, 12, 0.7) 100%
+      );
+    }
+
+    .app-content {
+      padding: 12vh 1.2rem 10vh;
+      max-width: 100%;
+    }
+
+    .app-headline {
+      font-size: clamp(1.8rem, 7vw, 2.4rem);
+    }
+
+    .app-body {
+      max-width: 100%;
     }
 
     .section-pivot {
@@ -2610,12 +2704,36 @@
 
   @media (max-width: 640px) {
     .sticky-bar {
-      gap: 0.8rem;
-      padding: 0.7rem 0.7rem 0.7rem 1.2rem;
+      gap: 0.7rem;
+      padding: 0.55rem 0.55rem 0.55rem 1rem;
+      bottom: 14px;
+      max-width: calc(100vw - 24px);
     }
-    .sticky-bar-info { font-size: 0.85rem; }
-    .sticky-bar-label { font-size: 0.55rem; letter-spacing: 0.35em; }
-    .sticky-bar-cta { padding: 0.7rem 1rem; font-size: 0.65rem; letter-spacing: 0.25em; }
+    .sticky-bar-text { gap: 0; min-width: 0; }
+    .sticky-bar-info {
+      font-size: 0.78rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sticky-bar-label {
+      font-size: 0.5rem;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+    }
+    .sticky-bar-cta {
+      padding: 0.6rem 0.9rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
+      text-indent: 0.22em;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .sticky-bar-info { font-size: 0.7rem; }
+    .sticky-bar-cta { padding: 0.55rem 0.7rem; font-size: 0.55rem; }
   }
 
   /* ==================== STATS / COUNTERS ==================== */
